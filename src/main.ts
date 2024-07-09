@@ -1,20 +1,25 @@
-/**
- * main.ts
- *
- * Bootstraps Vuetify and other plugins then mounts the App`
- */
+//import './assets/main.css'
 
-// Plugins
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+import App from './App.vue'
+import router from './router'
+import Vuetify from './plugins/vuetify'
+import 'vuetify/styles'
+import '@mdi/font/css/materialdesignicons.css'
 import { registerPlugins } from '@/plugins'
 
-// Components
-import App from './App.vue'
+;(async () => {
+  const app = createApp(App)
 
-// Composables
-import { createApp } from 'vue'
-
-const app = createApp(App)
+  app.use(createPinia())
+  app.use(router)
+  app.use(Vuetify)
 
 registerPlugins(app)
 
-app.mount('#app')
+
+  //const authStore = useAuthStore()
+  //await authStore.verifyToken()
+  app.mount('#app')
+})()
