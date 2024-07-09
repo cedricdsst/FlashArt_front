@@ -1,0 +1,6 @@
+<template>
+
+    <NavBar />
+
+    <Card />
+</template>
