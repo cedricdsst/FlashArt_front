@@ -1,9 +1,5 @@
 <template>
-  <v-app>
-    <v-main>
-      <Home />
-    </v-main>
-  </v-app>
+  <NavBar />
 </template>
 
 <script setup lang="ts">

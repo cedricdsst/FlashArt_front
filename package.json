@@ -12,6 +12,7 @@
     "leaflet-geosearch": "^4.0.0",
     "roboto-fontface": "*",
     "vue": "^3.4.21",
+    "vue-router": "^4.4.0",
     "vuetify": "^3.6.11"
   },
   "devDependencies": {
