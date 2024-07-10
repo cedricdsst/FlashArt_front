@@ -7,6 +7,8 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    AppointmentForm: typeof import('./src/components/AppointmentForm.vue')['default']
+    AutoCompletion: typeof import('./src/components/AutoCompletion.vue')['default']
     Card: typeof import('./src/components/Card.vue')['default']
     Home: typeof import('./src/components/Home.vue')['default']
     ImageIntroduction: typeof import('./src/components/ImageIntroduction.vue')['default']
