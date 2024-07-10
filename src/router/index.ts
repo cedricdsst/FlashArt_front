@@ -1,0 +1,28 @@
+import { createRouter, createWebHistory } from 'vue-router';
+import Tattoist from '@/views/dashboards/Tattoist.vue';
+import Login from '@/views/Login.vue';
+
+const routes = [
+    // {
+    //     path: '/',
+    //     name: 'Home',
+    //     component: Home,
+    // },
+    {
+      path: '/login',
+      name: 'LoginPage',
+      component: Login,
+  },
+    {
+        path: '/dashboard/tattoist',
+        name: 'TattoistPage',
+        component: Tattoist,
+    },
+];
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+});
+
+export default router;
