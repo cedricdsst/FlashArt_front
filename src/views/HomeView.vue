@@ -4,8 +4,9 @@
 
     <ImageIntroduction />
 
-    <h2 class="text-center">Les plus populaires</h2>
+    <h2 class="text-center pa-7">Les plus populaires</h2>
 
+    <Card />
     <Card />
 </template>
 <script setup lang="ts">
