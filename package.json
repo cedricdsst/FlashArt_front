@@ -10,6 +10,7 @@
     "@mdi/font": "6.2.95",
     "leaflet": "^1.9.4",
     "leaflet-geosearch": "^4.0.0",
+    "pinia": "^2.1.7",
     "roboto-fontface": "*",
     "router-view": "^1.1.7",
     "vue": "^3.4.21",

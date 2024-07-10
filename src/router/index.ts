@@ -1,13 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Tattoist from '@/views/dashboards/Tattoist.vue';
 import Login from '@/views/Login.vue';
+import HomeView from '../views/HomeView.vue'
 
 const routes = [
-    // {
-    //     path: '/',
-    //     name: 'Home',
-    //     component: Home,
-    // },
+    {
+      path: '/',
+      name: 'home',
+      component: HomeView
+    },
     {
       path: '/login',
       name: 'LoginPage',
