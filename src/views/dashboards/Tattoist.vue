@@ -1,4 +1,5 @@
 <template>
+    <AppointmentForm />
     <AutoCompletion />
 </template>
 

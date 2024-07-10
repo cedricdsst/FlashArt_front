@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Tattoist from '@/views/dashboards/Tattoist.vue';
-import Home from '@/views/Home.vue';
+import Login from '@/views/Login.vue';
 
 const routes = [
     // {
@@ -8,6 +8,11 @@ const routes = [
     //     name: 'Home',
     //     component: Home,
     // },
+    {
+      path: '/login',
+      name: 'LoginPage',
+      component: Login,
+  },
     {
         path: '/dashboard/tattoist',
         name: 'TattoistPage',
