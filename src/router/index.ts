@@ -4,6 +4,7 @@ import Login from '@/views/Login.vue';
 import HomeView from '../views/HomeView.vue';
 import SingleTattoo from '@/views/SingleTattoo.vue';
 import SingleTattooist from '@/views/SingleTattooist.vue';
+import UserEditProfile from '@/views/user/UserEditProfile.vue';
 
 const routes = [
     {
@@ -30,6 +31,11 @@ const routes = [
     path: '/tattooist',
     name: 'SingleTattooistPage',
     component: SingleTattooist,
+  },
+  {
+    path: '/user/edit',
+    name: 'UserEditInformationPage',
+    component: UserEditProfile,
   },
 ];
 
