@@ -1,6 +1,7 @@
 <template>
     <AppointmentForm />
-    <AutoCompletion />
+    <flashForm />
+    <MapDisplay />
 </template>
 
 <script setup lang="ts">
