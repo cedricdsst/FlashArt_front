@@ -3,6 +3,7 @@ import Tattoist from '@/views/dashboards/Tattoist.vue';
 import Login from '@/views/Login.vue';
 import HomeView from '../views/HomeView.vue';
 import SingleTattoo from '@/views/SingleTattoo.vue';
+import SingleTattooist from '@/views/SingleTattooist.vue';
 
 const routes = [
     {
@@ -24,6 +25,11 @@ const routes = [
     path: '/tattoo',
     name: 'SingleTattooPage',
     component: SingleTattoo,
+  },
+  {
+    path: '/tattooist',
+    name: 'SingleTattooistPage',
+    component: SingleTattooist,
   },
 ];
 
