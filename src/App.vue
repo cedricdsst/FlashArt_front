@@ -1,3 +1,12 @@
+<style>
+@media (min-width: 1024px) {
+  #app {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+}
+</style>
+
 <template>
   <v-app>
     <v-main>
