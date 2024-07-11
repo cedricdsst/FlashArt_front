@@ -46,8 +46,13 @@ export const getRdvById = async (rdvId: string) => {
     return response.data;
 };
 
-export const getAllRdvs = async () => {
-    const response = await axios.get(`${apiUrl}/rdv`);
+export const getAllRdvsArtist = async () => {
+    const response = await axios.get(`${apiUrl}/rdv/artist`);
+    return response.data;
+};
+
+export const getAllRdvsClient = async () => {
+    const response = await axios.get(`${apiUrl}/rdv/client`);
     return response.data;
 };
 
