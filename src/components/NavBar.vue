@@ -19,9 +19,7 @@
       <v-icon>mdi-home</v-icon>
     </v-btn>
 
-    <v-btn value="account" to="/login">
-      <v-icon>mdi-account-circle</v-icon>
-    </v-btn>
+    <DashboardNavItem />
   </v-bottom-navigation>
 </template>
 <script setup lang="ts"></script>
