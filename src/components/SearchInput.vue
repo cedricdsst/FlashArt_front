@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="bottom-border">
     <v-autocomplete
       v-model="selectedTags"
       clearable
@@ -7,36 +7,56 @@
       label="Rechercher..."
       :items="tagItems"
       multiple
-      @update:model-value="onFiltersUpdate"
     ></v-autocomplete>
 
+    <div>
+      <v-btn
+        v-for="option in dayOptions"
+        :key="option.value"
+        :class="{ 'v-btn--active': selectedDays === option.value }"
+        @click="selectedDays = option.value"
+        class="m-2"
+      >
+        {{ option.label }}
+      </v-btn>
+    </div>
+    
+    <br>
+    <v-row align="center">
+    <v-col cols="auto">
+      <v-btn @click="getLocation">Get Location</v-btn>
+    </v-col>
+    <v-col>
+      <p v-if="userLocationCity" class="bold">{{ userLocationCity }}</p>
+    </v-col>
+  </v-row>
     <v-slider
-      v-model="selectedDays"
-      :min="1"
-      :max="30"
-      :step="1"
-      label="Days"
-      @change="onFiltersUpdate"
-    ></v-slider>
-    <p>Selected Days: {{ selectedDays }}</p>
-
-    <v-slider
+      v-if="userLocation"
       v-model="selectedKm"
       :min="1"
-      :max="1000"
+      :max="150"
       :step="1"
-      label="Kilometers"
-      @change="onFiltersUpdate"
-    ></v-slider>
-    <p>Selected Kilometers: {{ selectedKm }}</p>
-
-    <v-btn @click="getLocation">Get Location</v-btn>
-    <p v-if="userLocationCity">Location: {{ userLocationCity }}</p>
+    >
+      <template v-slot:label class="bold">
+        {{ selectedKm }} Km
+      </template>
+    </v-slider>
+    
+    
+    <br>
+    <br>
+    <v-row justify="center">
+    <v-col cols="auto" style="padding-top:0px">
+      <v-btn @click="onSubmitSearch">Submit Search</v-btn>
+      <p v-if="flashCount !== null" align="center" class="flash-count">{{ flashCount }} flash(s)</p>
+    </v-col>
+  </v-row>
+    
   </v-container>
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeMount, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import axios from "axios";
 import { storeToRefs } from "pinia";
 import { useTagStore } from "../stores/tagStore";
@@ -47,32 +67,39 @@ const flashStore = useFlashStore();
 const { tags } = storeToRefs(tagStore);
 
 const selectedTags = ref<string[]>([]);
-const selectedDays = ref<number>(1);
-const selectedKm = ref<number>(1);
+const selectedDays = ref<number>(7); // Default to 1 day (tomorrow)
+const selectedKm = ref<number>(5);
 const userLocation = ref<[number, number] | null>(null);
 const userLocationCity = ref<string | null>(null);
+const flashCount = ref<number | null>(null);
+
+const dayOptions = [
+  { label: 'Demain', value: 1 },
+  { label: "7 Jours", value: 7 },
+  { label: "30 Jours", value: 30 }
+];
 
 const tagItems = computed(() => {
   return tags.value.map((tag) => tag.name);
 });
 
-onBeforeMount(async () => {
+onMounted(async () => {
   await tagStore.fetchTags();
-  await flashStore.fetchFlashes();
 });
 
-const onFiltersUpdate = async () => {
+const onSubmitSearch = async () => {
   console.log("Selected Tags:", selectedTags.value);
   console.log("Selected Days:", selectedDays.value);
   console.log("Selected Km:", selectedKm.value);
   console.log("User Location:", userLocation.value);
   try {
-    await flashStore.fetchFlashesByTag(
+    await flashStore.fetchFlashes(
       selectedTags.value,
       selectedDays.value,
       userLocation.value,
       selectedKm.value
     );
+    flashCount.value = flashStore.flashes.length;
     console.log("Flashes fetched successfully");
   } catch (error) {
     console.error("Error fetching flashes:", error);
@@ -84,13 +111,11 @@ const getLocation = () => {
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         userLocation.value = [
-          8.8, 70.7,
-          // position.coords.longitude,
-          // position.coords.latitude,
+          position.coords.longitude,
+          position.coords.latitude,
         ];
         console.log("User Coordinates:", userLocation.value);
         await fetchCityName(userLocation.value);
-        onFiltersUpdate(); // Update the flashes after getting the location
       },
       (error) => {
         console.error("Error getting location:", error);
@@ -104,7 +129,7 @@ const getLocation = () => {
 const fetchCityName = async (location: [number, number]) => {
   try {
     const response = await axios.get(
-      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${location[0]}&lon=${location[1]}`
+      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${location[1]}&lon=${location[0]}`
     );
     userLocationCity.value =
       response.data.address.city ||
@@ -118,3 +143,24 @@ const fetchCityName = async (location: [number, number]) => {
   }
 };
 </script>
+
+<style>
+.v-btn--active {
+  background-color: #493208 !important;
+  color: white !important;
+}
+
+.bottom-border {
+  border-bottom: 1px solid grey;
+  margin-bottom: 5px;
+}
+
+.flash-count{
+  margin-top: 2px;
+  
+}
+
+.bold{
+  font-weight: bold;
+}
+</style>

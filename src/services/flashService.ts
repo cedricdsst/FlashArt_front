@@ -46,23 +46,18 @@ export const updateFlash = async (flash: Flash, file?: File) => {
 
 export const deleteFlash = async (flashId: string) => {
     const response = await axios.delete(`${apiUrl}/flash`, {
-    
         data: { flashId },
     });
 
     return response.data;
 };
 
-export const getAllFlashes = async (tags?: string[]) => {
+
+
+export const getAllFlashes = async (tags?: string[], days?: number, location?: number[], km?: number) => {
+    console.log({ tags, days, location, km })
     const response = await axios.get(`${apiUrl}/flash`, {
-        params: { tags: tags?.join(',') },
-        withCredentials: false,
-/* export const getAllFlashes = async (tags?: string[], days?:number, location?:number[], km?:number) => {
-    console.log({tags,days,location,km})
-    const response = await axios.get(API_URL, {
         params: { tags: tags?.join(','), days: days, location: location?.join(','), km: km },
-    });
-} */
     });
     return response.data;
 };

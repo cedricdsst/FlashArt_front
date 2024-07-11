@@ -29,9 +29,9 @@ const routes = [
     meta: { requiresAuth: true, role: 'client' },
   },
   {
-      path: '/dashboard/tattoist',
-      name: 'TattoistPage',
-      component: Tattoist,
+    path: '/dashboard/tattoist',
+    name: 'TattoistPage',
+    component: Tattoist,
   },
   {
     path: '/tattoo',
@@ -72,17 +72,17 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
   if (to.matched.some(record => record.meta.requiresAuth)) {
-      // Vérifier si l'utilisateur est authentifié
-      if (!authStore.userId) {
-          next({ name: 'LoginPage' });
-      } else if (to.meta.role && authStore.role !== to.meta.role) {
-          // Vérifier si l'utilisateur a le rôle requis
-          next({ name: 'home' }); // Ou une autre route pour gérer les accès refusés
-      } else {
-          next();
-      }
-  } else {
+    // Vérifier si l'utilisateur est authentifié
+    if (!authStore.userId) {
+      next({ name: 'LoginPage' });
+    } else if (to.meta.role && authStore.role !== to.meta.role) {
+      // Vérifier si l'utilisateur a le rôle requis
+      next({ name: 'home' }); // Ou une autre route pour gérer les accès refusés
+    } else {
       next();
+    }
+  } else {
+    next();
   }
 });
 
