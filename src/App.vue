@@ -16,6 +16,17 @@
   </v-app>
 </template>
 
-<script setup lang="ts">
-  //
+<script lang="ts">
+import { RouterLink, RouterView } from "vue-router";
+
+export default {
+  computed: {
+    isInAdminSection() {
+      return this.$route.path.startsWith("/admin");
+    },
+    isInLoginSection() {
+      return this.$route.path.startsWith("/login");
+    },
+  },
+};
 </script>

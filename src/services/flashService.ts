@@ -46,7 +46,7 @@ export const updateFlash = async (flash: Flash, file?: File) => {
 
 export const deleteFlash = async (flashId: string) => {
     const response = await axios.delete(`${apiUrl}/flash`, {
-    
+
         data: { flashId },
     });
 
