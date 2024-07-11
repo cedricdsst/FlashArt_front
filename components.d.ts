@@ -12,6 +12,7 @@ declare module 'vue' {
     Card: typeof import('./src/components/Card.vue')['default']
     FlashForm: typeof import('./src/components/FlashForm.vue')['default']
     Home: typeof import('./src/components/Home.vue')['default']
+    MapDisplay: typeof import('./src/components/MapDisplay.vue')['default']
     NavBar: typeof import('./src/components/NavBar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
