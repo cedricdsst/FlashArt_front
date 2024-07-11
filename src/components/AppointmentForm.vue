@@ -30,8 +30,8 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { apiUrl } from '@/config';
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
+import { useRdvStore } from '@/stores/rdvStore';
 
 export default defineComponent({
   name: 'AppointmentForm',
@@ -50,6 +50,7 @@ export default defineComponent({
     const rdvId = ref<string | null>(null);
 
     const router = useRouter();
+    const rdvStore = useRdvStore();
     let searchTimer: ReturnType<typeof setTimeout> | null = null;
 
     const handleInput = async () => {
@@ -108,22 +109,9 @@ export default defineComponent({
             }
         };
 
-        const response = await fetch(apiUrl + '/rdv', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(appointmentObject),
-          credentials: 'include'
-        });
-
-        const result = await response.json();
-        if (response.ok) {
-          message.value = 'Le rendez-vous a été créé!';
-          rdvId.value = result.rdvData.id;
-        } else {
-          message.value = `Error: ${result.message}`;
-        }
+        await rdvStore.createNewRdv(appointmentObject);
+        message.value = 'Le rendez-vous a été créé!';
+        rdvId.value = appointmentObject._id;
       } catch (error) {
         console.error('Error:', error);
         message.value = 'Erreur lors de la création de rendez-vous';
@@ -146,3 +134,4 @@ export default defineComponent({
   }
 });
 </script>
+

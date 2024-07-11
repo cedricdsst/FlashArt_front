@@ -74,7 +74,7 @@ export default defineComponent({
           tags: selectedTags.value.map(tag => ({ id: tag._id, name: tag.name })),
           price: price.value
         };
-        await flashStore.createNewFlash(flashObject, image);
+        await flashStore.createNewFlash(flashObject, image.value);
       } catch (error) {
         console.error('Error:', error);
         message.value = 'An error occurred while creating the flash.';
