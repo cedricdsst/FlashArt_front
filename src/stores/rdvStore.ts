@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { createRdv, bookRdv, getAllRdvs, getRdvById, updateRdvById, deleteRdvById } from '@/services/rdvService';
+import { createRdv, bookRdv, getAllRdvsArtist,getAllRdvsClient, getRdvById, updateRdvById, deleteRdvById } from '@/services/rdvService';
 
 interface Location {
     type: string;
@@ -27,9 +27,17 @@ export const useRdvStore = defineStore('rdv', () => {
     const rdvs = ref<Rdv[]>([]);
     const currentRdv = ref<Rdv | null>(null);
 
-    const fetchRdvs = async () => {
+    const fetchRdvsArtist = async () => {
         try {
-            rdvs.value = await getAllRdvs();
+            rdvs.value = await getAllRdvsArtist();
+        } catch (error) {
+            console.error('Failed to fetch RDVs:', error);
+        }
+    };
+
+    const fetchRdvsClient = async () => {
+        try {
+            rdvs.value = await getAllRdvsClient();
         } catch (error) {
             console.error('Failed to fetch RDVs:', error);
         }
@@ -88,7 +96,8 @@ export const useRdvStore = defineStore('rdv', () => {
     return {
         rdvs,
         currentRdv,
-        fetchRdvs,
+        fetchRdvsArtist,
+        fetchRdvsClient,
         fetchRdvById,
         createNewRdv,
         bookExistingRdv,
