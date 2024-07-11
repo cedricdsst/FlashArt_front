@@ -1,5 +1,4 @@
 <template>
-  <NavBar />
   <h2>Search page</h2>
   <SearchInput />
 
