@@ -7,7 +7,6 @@
       label="Rechercher..."
       :items="tagItems"
       multiple
-      @update:model-value="onFiltersUpdate"
     ></v-autocomplete>
 
     <v-slider
@@ -16,7 +15,6 @@
       :max="30"
       :step="1"
       label="Days"
-      @change="onFiltersUpdate"
     ></v-slider>
     <p>Selected Days: {{ selectedDays }}</p>
 
@@ -26,12 +24,13 @@
       :max="1000"
       :step="1"
       label="Kilometers"
-      @change="onFiltersUpdate"
     ></v-slider>
     <p>Selected Kilometers: {{ selectedKm }}</p>
 
     <v-btn @click="getLocation">Get Location</v-btn>
     <p v-if="userLocationCity">Location: {{ userLocationCity }}</p>
+
+    <v-btn @click="onSubmitSearch">Submit Search</v-btn>
   </v-container>
 </template>
 
@@ -61,13 +60,13 @@ onBeforeMount(async () => {
   await flashStore.fetchFlashes();
 });
 
-const onFiltersUpdate = async () => {
+const onSubmitSearch = async () => {
   console.log("Selected Tags:", selectedTags.value);
   console.log("Selected Days:", selectedDays.value);
   console.log("Selected Km:", selectedKm.value);
   console.log("User Location:", userLocation.value);
   try {
-    await flashStore.fetchFlashesByTag(
+    await flashStore.fetchFlashes(
       selectedTags.value,
       selectedDays.value,
       userLocation.value,
@@ -84,13 +83,12 @@ const getLocation = () => {
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         userLocation.value = [
-          8.8, 70.7,
-          // position.coords.longitude,
-          // position.coords.latitude,
+           position.coords.longitude,
+           position.coords.latitude,
+         
         ];
         console.log("User Coordinates:", userLocation.value);
         await fetchCityName(userLocation.value);
-        onFiltersUpdate(); // Update the flashes after getting the location
       },
       (error) => {
         console.error("Error getting location:", error);
