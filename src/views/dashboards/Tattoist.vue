@@ -1,6 +1,8 @@
 <template>
     <AppointmentForm />
+
     <flashForm />
+
     <MapDisplay />
 </template>
 

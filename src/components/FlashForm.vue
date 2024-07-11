@@ -1,32 +1,58 @@
-<template>
-  <div>
-    <h1>Create Flash</h1>
-    <form @submit.prevent="createFlash">
-      <label for="image">Upload Image:</label>
-      <input type="file" id="image" accept="image/*" @change="handleImageChange" required><br><br>
+<style>
+.number-input {
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ccc;
+  width: 100%;
+  padding: 10px;
+}
 
-      <label for="tags">Tags:</label>
-      <multiselect 
-        v-model="selectedTags" 
-        :options="tags" 
-        :multiple="true" 
-        :taggable="true" 
-        :close-on-select="false" 
-        :clear-on-select="false" 
+.multiselect-input {
+  padding-bottom: 2rem;
+}
+
+.error {
+  color: red;
+}
+</style>
+
+<template>
+  <v-container>
+  <v-divider><h2>Créer un FlashArt</h2></v-divider>
+  <div class="mt-5">
+    <v-form @submit.prevent="createFlash">
+      <div>
+        <v-label for="image">Mettre en ligne une image :</v-label>
+        <v-file-input type="file" id="image" accept="image/*" @change="handleImageChange" required></v-file-input>
+      </div>
+
+      <div>
+      <v-label for="tags">Tags:</v-label>
+      <multiselect
+        v-model="selectedTags"
+        :options="tags"
+        :multiple="true"
+        :taggable="true"
+        :close-on-select="false"
+        :clear-on-select="false"
         :preserve-search="true"
         placeholder="Ajouter des tags"
+        class="multiselect-input"
         label="name"
         track-by="_id">
-      </multiselect><br><br>
+      </multiselect>
+      </div>
 
-      <label for="price">Price:</label>
-      <input type="number" id="price" v-model.number="price" required><br><br>
+      <div>
+        <v-label for="price">Prix :</v-label><br>
+        <input class="number-input" type="number" id="price" v-model.number="price" required />
+      </div>
 
-      <button type="submit">Créer un Flash</button>
-    </form>
+      <v-btn class="mt-10" color="brown-darken-3" type="submit">Créer un Flash</v-btn>
+    </v-form>
 
-    <p v-if="message">{{ message }}</p>
+    <p class="mt-3 error" v-if="message">{{ message }}</p>
   </div>
+  </v-container>
 </template>
 
 <script lang="ts">
