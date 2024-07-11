@@ -6,13 +6,15 @@ interface UserState {
     userId: string | null
     username: string | null
     email: string | null
+    role: string | null
 }
 
 export const useAuthStore = defineStore('auth', {
     state: (): UserState => ({
         userId: null,
         username: null,
-        email: null
+        email: null,
+        role: null
     }),
     actions: {
         async signup(user: { email: string; password: string; username: string }) {
@@ -38,6 +40,7 @@ export const useAuthStore = defineStore('auth', {
                     this.userId = response.data.userId;
                     this.username = response.data.username;
                     this.email = response.data.email;
+                    this.role = response.data.role;
                     console.log(response);
 
                 } else {
@@ -65,6 +68,7 @@ export const useAuthStore = defineStore('auth', {
                     this.userId = response.data.userId;
                     this.username = response.data.username;
                     this.email = response.data.email;
+                    this.role = response.data.role;
                 } else {
                     // Gérer le cas où les données ne sont pas comme prévu
                     this.clearUser();
@@ -81,6 +85,7 @@ export const useAuthStore = defineStore('auth', {
             this.userId = null
             this.username = null
             this.email = null
+            this.role = null
         }
     }
 })

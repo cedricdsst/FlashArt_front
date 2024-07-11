@@ -1,17 +1,43 @@
 <template>
-  <v-autocomplete
-    v-model="selectedTags"
-    clearable
-    chips
-    label="Rechercher..."
-    :items="tagItems"
-    multiple
-    @update:model-value="onTagsUpdate"
-  ></v-autocomplete>
+  <v-container>
+    <v-autocomplete
+      v-model="selectedTags"
+      clearable
+      chips
+      label="Rechercher..."
+      :items="tagItems"
+      multiple
+      @update:model-value="onFiltersUpdate"
+    ></v-autocomplete>
+
+    <v-slider
+      v-model="selectedDays"
+      :min="1"
+      :max="30"
+      :step="1"
+      label="Days"
+      @change="onFiltersUpdate"
+    ></v-slider>
+    <p>Selected Days: {{ selectedDays }}</p>
+
+    <v-slider
+      v-model="selectedKm"
+      :min="1"
+      :max="1000"
+      :step="1"
+      label="Kilometers"
+      @change="onFiltersUpdate"
+    ></v-slider>
+    <p>Selected Kilometers: {{ selectedKm }}</p>
+
+    <v-btn @click="getLocation">Get Location</v-btn>
+    <p v-if="userLocationCity">Location: {{ userLocationCity }}</p>
+  </v-container>
 </template>
 
 <script setup lang="ts">
 import { ref, onBeforeMount, computed } from "vue";
+import axios from "axios";
 import { storeToRefs } from "pinia";
 import { useTagStore } from "../stores/tagStore";
 import { useFlashStore } from "../stores/flashStore";
@@ -20,7 +46,11 @@ const tagStore = useTagStore();
 const flashStore = useFlashStore();
 const { tags } = storeToRefs(tagStore);
 
-const selectedTags = ref([]);
+const selectedTags = ref<string[]>([]);
+const selectedDays = ref<number>(1);
+const selectedKm = ref<number>(1);
+const userLocation = ref<[number, number] | null>(null);
+const userLocationCity = ref<string | null>(null);
 
 const tagItems = computed(() => {
   return tags.value.map((tag) => tag.name);
@@ -31,13 +61,60 @@ onBeforeMount(async () => {
   await flashStore.fetchFlashes();
 });
 
-const onTagsUpdate = async (newTags: string[]) => {
-  console.log("Tags updated:", newTags);
+const onFiltersUpdate = async () => {
+  console.log("Selected Tags:", selectedTags.value);
+  console.log("Selected Days:", selectedDays.value);
+  console.log("Selected Km:", selectedKm.value);
+  console.log("User Location:", userLocation.value);
   try {
-    await flashStore.fetchFlashesByTag(newTags);
+    await flashStore.fetchFlashesByTag(
+      selectedTags.value,
+      selectedDays.value,
+      userLocation.value,
+      selectedKm.value
+    );
     console.log("Flashes fetched successfully");
   } catch (error) {
     console.error("Error fetching flashes:", error);
+  }
+};
+
+const getLocation = () => {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        userLocation.value = [
+          8.8, 70.7,
+          // position.coords.longitude,
+          // position.coords.latitude,
+        ];
+        console.log("User Coordinates:", userLocation.value);
+        await fetchCityName(userLocation.value);
+        onFiltersUpdate(); // Update the flashes after getting the location
+      },
+      (error) => {
+        console.error("Error getting location:", error);
+      }
+    );
+  } else {
+    console.error("Geolocation is not supported by this browser.");
+  }
+};
+
+const fetchCityName = async (location: [number, number]) => {
+  try {
+    const response = await axios.get(
+      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${location[0]}&lon=${location[1]}`
+    );
+    userLocationCity.value =
+      response.data.address.city ||
+      response.data.address.town ||
+      response.data.address.village ||
+      "Unknown location";
+    console.log("User Location City:", userLocationCity.value);
+  } catch (error) {
+    console.error("Error fetching city name:", error);
+    userLocationCity.value = "Unknown location";
   }
 };
 </script>

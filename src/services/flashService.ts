@@ -57,8 +57,13 @@ export const getAllFlashes = async (tags?: string[]) => {
     const response = await axios.get(`${apiUrl}/flash`, {
         params: { tags: tags?.join(',') },
         withCredentials: false,
+/* export const getAllFlashes = async (tags?: string[], days?:number, location?:number[], km?:number) => {
+    console.log({tags,days,location,km})
+    const response = await axios.get(API_URL, {
+        params: { tags: tags?.join(','), days: days, location: location?.join(','), km: km },
     });
-
+} */
+    });
     return response.data;
 };
 

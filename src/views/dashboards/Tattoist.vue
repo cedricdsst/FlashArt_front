@@ -1,11 +1,11 @@
 <template>
-    <AppointmentForm />
+  <AppointmentForm />
 
-    <flashForm />
-    <!-- <MapDisplay /> -->
+  <flashForm />
+  <!-- <MapDisplay /> -->
+  <LogoutButton class="mt-4" />
 </template>
 
 <script setup lang="ts">
-  //
+//
 </script>
-
