@@ -1,9 +1,3 @@
-<style>
-.error {
-  color: red;
-}
-</style>
-
 <template>
   <ImageIntroduction></ImageIntroduction>
   <v-container>
@@ -63,7 +57,7 @@ import { useRdvStore } from '@/stores/rdvStore';
 
 export default defineComponent({
   name: 'AppointmentForm',
-  components: {ImageIntroduction},
+  components: { ImageIntroduction },
   setup() {
     const date = ref<string>('');
     const searchQuery = ref('');
@@ -77,6 +71,7 @@ export default defineComponent({
 
     const message = ref<string>('');
     const rdvId = ref<string | null>(null);
+    const selectedCity = ref<string>('');
 
     const router = useRouter();
     const rdvStore = useRdvStore();
@@ -114,9 +109,11 @@ export default defineComponent({
     let latitude = 0;
     const selectAddress = (result) => {
       searchQuery.value = result.label;
-      console.log(result.x);
       longitude = result.x;
       latitude = result.y;
+
+      // Extract the city from the result object
+      selectedCity.value = result.raw.address.city || result.raw.address.town || result.raw.address.village || 'Unknown city';
     };
 
     const createAppointment = async () => {
@@ -133,14 +130,15 @@ export default defineComponent({
             coordinates: [longitude, latitude]
           },
           properties: {
-              title: 'Title',
-              address: searchQuery.value
-            }
+            title: 'Title',
+            address: searchQuery.value,
+            //city: selectedCity.value
+          }
         };
 
-        await rdvStore.createNewRdv(appointmentObject);
+        const response = await rdvStore.createNewRdv(appointmentObject);
         message.value = 'Le rendez-vous a été créé!';
-        rdvId.value = appointmentObject._id;
+        rdvId.value = response._id; // assuming response contains the created rdv object with _id
       } catch (error) {
         console.error('Error:', error);
         message.value = 'Erreur lors de la création de rendez-vous';
@@ -158,10 +156,15 @@ export default defineComponent({
       handleInput,
       handleCountryChange,
       selectAddress,
-      createAppointment
+      createAppointment,
+      selectedCity
     };
   },
 });
-
 </script>
 
+<style>
+.error {
+  color: red;
+}
+</style>

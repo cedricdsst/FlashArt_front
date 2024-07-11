@@ -1,9 +1,75 @@
 <template>
+  <v-container>
+    <v-alert
+      v-if="notification.message"
+      :type="notification.type"
+      dismissible
+      @input="clearNotification"
+      transition="fade"
+      class="fixed-top"
+    >
+      {{ notification.message }}
+    </v-alert>
 
-  <Card/>
-
-  <Timetable />
+    <div v-if="currentFlash">
+      <Card :flash="currentFlash" />
+      <Timetable :rdvs="currentFlash.user_id.rdv_ids" :flashId="currentFlash._id" @book="book" />
+    </div>
+    <div v-else>
+      <p>Loading...</p>
+    </div>
+  </v-container>
 </template>
-<script setup lang="ts">
 
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { storeToRefs } from 'pinia';
+import { useFlashStore } from '../stores/flashStore';
+import { useRdvStore } from '../stores/rdvStore'; // Adjust the import path as necessary
+import Card from '../components/Card.vue'; // Adjust the import path as necessary
+import Timetable from '../components/Timetable.vue'; // Adjust the import path as necessary
+
+const route = useRoute();
+const flashStore = useFlashStore();
+const rdvStore = useRdvStore();
+const { currentFlash } = storeToRefs(flashStore);
+
+const notification = ref({ message: '', type: '' });
+
+const fetchData = async () => {
+  const flashId = route.params.flashId;
+  console.log('flashId:', flashId); // Debug log to check flashId
+
+  await flashStore.fetchFlashById(flashId);
+  console.log('currentFlash:', currentFlash.value); // Debug log to check currentFlash
+};
+
+onMounted(fetchData);
+
+const book = async (rdvId) => {
+  try {
+    await rdvStore.bookExistingRdv(rdvId, currentFlash.value._id);
+    notification.value = { message: 'RDV booked successfully!', type: 'success' };
+    await fetchData(); // Refetch the data after booking
+  } catch (error) {
+    notification.value = { message: 'Failed to book RDV.', type: 'error' };
+  }
+  setTimeout(clearNotification, 4000); // Clear notification after 4 seconds
+};
+
+const clearNotification = () => {
+  notification.value = { message: '', type: '' };
+};
 </script>
+
+<style scoped>
+.fixed-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000;
+}
+</style>

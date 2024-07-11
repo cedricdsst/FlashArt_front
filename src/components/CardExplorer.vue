@@ -1,3 +1,31 @@
+<template>
+  <div>
+    <div class="explorer-grid" v-if="flashes.length">
+      <div v-for="flash in flashes" :key="flash._id" class="grid-item">
+        <v-img
+          :src="flash.image"
+          :aspect-ratio="1"
+          :alt="flash.tags.map((tag) => tag.name).join(', ')"
+          cover
+        ></v-img>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { onMounted } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useFlashStore } from '../stores/flashStore';
+
+const flashStore = useFlashStore();
+const { flashes } = storeToRefs(flashStore);
+
+onMounted(() => {
+  flashStore.clearFlashes(); // Clear flashes on component load
+});
+</script>
+
 <style scoped>
 .explorer-grid {
   display: flex;
@@ -32,36 +60,3 @@
   }
 }
 </style>
-
-<template>
-  <div class="explorer-grid">
-    <div v-for="flash in flashes" :key="flash._id" class="grid-item">
-      <v-img
-        :src="flash.image"
-        :aspect-ratio="1"
-        :alt="flash.tags.map((tag) => tag.name).join(', ')"
-        cover
-      ></v-img>
-    </div>
-  </div>
-</template>
-
-<script setup lang="ts">
-import { onBeforeMount } from "vue";
-import { storeToRefs } from "pinia";
-import { useFlashStore } from "../stores/flashStore";
-
-const flashStore = useFlashStore();
-
-const { flashes } = storeToRefs(flashStore);
-
-onBeforeMount(async () => {
-  const fetchFlash = await flashStore.fetchFlashes();
-  console.log(flashes.value);
-});
-
-const handleTagClick = async (tagName: string) => {
-  await flashStore.fetchFlashesByTag(tagName);
-  window.scrollTo({ top: 0, behavior: "smooth" });
-};
-</script>

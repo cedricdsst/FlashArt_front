@@ -1,5 +1,5 @@
 <template>
-  <h2>Search page</h2>
+  
   <SearchInput />
 
   <CardExplorer />

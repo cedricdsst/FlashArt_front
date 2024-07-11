@@ -7,7 +7,7 @@ import SingleTattoo from '@/views/SingleTattoo.vue';
 import SingleTattooist from '@/views/SingleTattooist.vue';
 import UserEditProfile from '@/views/user/UserEditProfile.vue';
 import UserReservation from '@/views/user/UserReservation.vue';
-import SearchView from '../views/SearchView.vue'
+import SearchView from '../views/SearchView.vue';
 import { useAuthStore } from '@/stores/authStore';
 
 const routes = [
@@ -26,11 +26,13 @@ const routes = [
     path: '/dashboard/tattoist',
     name: 'TattoistPage',
     component: Tattoist,
+    meta: { requiresAuth: true, role: 'artist' }
   },
   {
-    path: '/tattoo',
+    path: '/tattoo/:flashId',
     name: 'SingleTattooPage',
     component: SingleTattoo,
+    props: true
   },
   {
     path: '/tattooist',
@@ -41,13 +43,14 @@ const routes = [
     path: '/user/edit',
     name: 'UserEditInformationPage',
     component: UserEditProfile,
+    meta: { requiresAuth: true }
   },
   {
     path: '/user/booked',
     name: 'UserBookedPage',
     component: UserReservation,
+    meta: { requiresAuth: true }
   },
-  ,
   {
     path: '/search',
     name: 'Search',
@@ -56,20 +59,28 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(process.env.BASE_URL),
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    // always scroll to top
+    return { top: 0 };
+  },
 });
 
-
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore();
+
+  if (authStore.userId === null) {
+    await authStore.verifyToken();
+  }
+
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    // Vérifier si l'utilisateur est authentifié
+    // Check if the user is authenticated
     if (!authStore.userId) {
       next({ name: 'LoginPage' });
     } else if (to.meta.role && authStore.role !== to.meta.role) {
-      // Vérifier si l'utilisateur a le rôle requis
-      next({ name: 'home' }); // Ou une autre route pour gérer les accès refusés
+      // Check if the user has the required role
+      next({ name: 'LoginPage' }); // Redirect to login if the role does not match
     } else {
       next();
     }
