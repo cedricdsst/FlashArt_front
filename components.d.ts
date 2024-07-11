@@ -10,6 +10,7 @@ declare module 'vue' {
     AppointmentForm: typeof import('./src/components/AppointmentForm.vue')['default']
     AutoCompletion: typeof import('./src/components/AutoCompletion.vue')['default']
     Card: typeof import('./src/components/Card.vue')['default']
+    FlashForm: typeof import('./src/components/FlashForm.vue')['default']
     Home: typeof import('./src/components/Home.vue')['default']
     NavBar: typeof import('./src/components/NavBar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

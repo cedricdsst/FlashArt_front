@@ -1,5 +1,6 @@
 <template>
     <AppointmentForm />
+    <flashForm />
     <AutoCompletion />
 </template>
 
