@@ -1,8 +1,6 @@
-// stores/tagStore.ts
-
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { createTag, getAllTags, getTagById, updateTagById, deleteTagById } from '../services/tagService';
+import { createTag, getAllTags, getTagById, updateTagById, deleteTagById } from '@/services/tagService';
 
 interface Tag {
   _id?: string;
@@ -15,9 +13,9 @@ export const useTagStore = defineStore('tag', () => {
 
   const fetchTags = async () => {
     try {
-      console.log('Fetching tags from store...'); // Journal de débogage
+      // console.log('Fetching tags from store...'); // Journal de débogage
       tags.value = await getAllTags();
-      console.log('Tags fetched in store:', tags.value); // Journal de débogage
+      // console.log('Tags fetched in store:', tags.value); // Journal de débogage
     } catch (error) {
       console.error('Failed to fetch tags:', error);
     }

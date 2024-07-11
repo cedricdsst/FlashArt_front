@@ -1,8 +1,6 @@
-// services/tagService.ts
-
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000/api/tag';
+import { apiUrl } from '@/config';
 
 interface Tag {
   _id?: string;
@@ -10,26 +8,26 @@ interface Tag {
 }
 
 export const createTag = async (tag: Tag) => {
-  const response = await axios.post(`${API_URL}`, tag);
+  const response = await axios.post(`${apiUrl}/tag`, tag);
   return response.data;
 };
 
 export const getAllTags = async () => {
-  const response = await axios.get(API_URL);
+  const response = await axios.get(`${apiUrl}/tag`);
   return response.data;
 };
 
 export const getTagById = async (id: string) => {
-  const response = await axios.get(`${API_URL}/${id}`);
+  const response = await axios.get(`${apiUrl}/tag/${id}`);
   return response.data;
 };
 
 export const updateTagById = async (id: string, tag: Tag) => {
-  const response = await axios.put(`${API_URL}/${id}`, tag);
+  const response = await axios.put(`${apiUrl}/tag/${id}`, tag);
   return response.data;
 };
 
 export const deleteTagById = async (id: string) => {
-  const response = await axios.delete(`${API_URL}/${id}`);
+  const response = await axios.delete(`${apiUrl}/tag/${id}`);
   return response.data;
 };

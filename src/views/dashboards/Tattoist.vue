@@ -1,7 +1,7 @@
 <template>
     <AppointmentForm />
     <flashForm />
-    <MapDisplay />
+    <!-- <MapDisplay /> -->
 </template>
 
 <script setup lang="ts">

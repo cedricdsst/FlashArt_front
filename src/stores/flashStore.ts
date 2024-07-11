@@ -2,7 +2,7 @@
 
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { createFlash, updateFlash, deleteFlash, getAllFlashes, getFlashById } from '../services/flashService';
+import { createFlash, updateFlash, deleteFlash, getAllFlashes, getFlashById } from '@/services/flashService';
 
 interface Tag {
     id: string;
@@ -23,9 +23,9 @@ export const useFlashStore = defineStore('flash', () => {
 
     const fetchFlashes = async (tags?: string[]) => {
         try {
-            console.log('Fetching flashes...'); // Journal de débogage
+            // console.log('Fetching flashes...'); // Journal de débogage
             flashes.value = await getAllFlashes(tags);
-            console.log('Flashes fetched:', flashes.value); // Journal de débogage
+            // console.log('Flashes fetched:', flashes.value); // Journal de débogage
         } catch (error) {
             console.error('Failed to fetch flashes:', error);
         }

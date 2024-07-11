@@ -1,9 +1,6 @@
-// services/flashService.ts
-
 import axios from 'axios';
-
-const API_URL = 'http://localhost:3000/api/flash';
-
+import { apiUrl } from '@/config';
+axios.defaults.withCredentials = true
 interface Tag {
     id: string;
     name: string;
@@ -20,9 +17,9 @@ interface Flash {
 export const createFlash = async (flash: Flash, file: File) => {
     const formData = new FormData();
     formData.append('flash', JSON.stringify(flash));
-    formData.append('file', file);
+    formData.append('image', file);
 
-    const response = await axios.post(`${API_URL}/create`, formData, {
+    const response = await axios.post(`${apiUrl}/flash`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
         },
@@ -38,7 +35,7 @@ export const updateFlash = async (flash: Flash, file?: File) => {
         formData.append('file', file);
     }
 
-    const response = await axios.put(`${API_URL}/update`, formData, {
+    const response = await axios.put(`${apiUrl}/flash`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
         },
@@ -48,7 +45,8 @@ export const updateFlash = async (flash: Flash, file?: File) => {
 };
 
 export const deleteFlash = async (flashId: string) => {
-    const response = await axios.delete(`${API_URL}/delete`, {
+    const response = await axios.delete(`${apiUrl}/flash`, {
+    
         data: { flashId },
     });
 
@@ -56,15 +54,18 @@ export const deleteFlash = async (flashId: string) => {
 };
 
 export const getAllFlashes = async (tags?: string[]) => {
-    const response = await axios.get(API_URL, {
+    const response = await axios.get(`${apiUrl}/flash`, {
         params: { tags: tags?.join(',') },
+        withCredentials: false,
     });
 
     return response.data;
 };
 
 export const getFlashById = async (flashId: string) => {
-    const response = await axios.get(`${API_URL}/${flashId}`);
+    const response = await axios.get(`${apiUrl}/flash/${flashId}`, {
+        withCredentials: false,
+    });
 
     return response.data;
 };

@@ -30,9 +30,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue';
+import { defineComponent, ref, onBeforeMount } from 'vue';
+import { useTagStore } from '@/stores/tagStore';
+import { useFlashStore } from '@/stores/flashStore';
+import { storeToRefs } from 'pinia';
 import Multiselect from 'vue-multiselect';
-// import 'vue-multiselect/dist/vue-multiselect.min.css';
 import 'vue-multiselect/dist/vue-multiselect.css';
 import { apiUrl } from '@/config';
 
@@ -41,26 +43,18 @@ export default defineComponent({
   components: { Multiselect },
   setup() {
     const image = ref<File | null>(null);
-    const tags = ref<Array<{ _id: string, name: string }>>([]);
     const selectedTags = ref<Array<{ _id: string, name: string }>>([]);
     const price = ref<number | null>(null);
 
     const message = ref<string>('');
 
-    const fetchTags = async () => {
-      try {
-        const response = await fetch(apiUrl + '/tag');
-        const result = await response.json();
-        if (response.ok) {
-          tags.value = result;
-        } else {
-          message.value = `Error: ${result.message}`;
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        message.value = 'An error occurred while fetching tags.';
-      }
-    };
+    const tagStore = useTagStore();
+    const flashStore = useFlashStore();
+    const { tags } = storeToRefs(tagStore);
+
+  onBeforeMount(async () => {
+    await tagStore.fetchTags();
+  }); 
 
     const handleImageChange = (event: Event) => {
       const target = event.target as HTMLInputElement;
@@ -76,37 +70,16 @@ export default defineComponent({
           return;
         }
 
-        const formData = new FormData();
-        formData.append('image', image.value);
-
         const flashObject = {
           tags: selectedTags.value.map(tag => ({ id: tag._id, name: tag.name })),
           price: price.value
         };
-
-        formData.append('flash', JSON.stringify(flashObject));
-
-        const response = await fetch(apiUrl + '/flash', {
-          method: 'POST',
-          body: formData,
-          credentials: 'include'
-        });
-
-        const result = await response.json();
-        if (response.ok) {
-          message.value = 'Flash created successfully!';
-        } else {
-          message.value = `Error: ${result.message}`;
-        }
+        await flashStore.createNewFlash(flashObject, image);
       } catch (error) {
         console.error('Error:', error);
         message.value = 'An error occurred while creating the flash.';
       }
     };
-
-    onMounted(() => {
-      fetchTags();
-    });
 
     return {
       tags,
