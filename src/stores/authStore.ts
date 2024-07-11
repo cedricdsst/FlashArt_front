@@ -1,31 +1,11 @@
 // src/stores/authStore.ts
-import { defineStore } from 'pinia';
-import { authService } from '../services/authService';
+import { defineStore } from 'pinia'
+import { authService } from '../services/authService'
 
 interface UserState {
-    userId: string | null;
-    username: string | null;
-    email: string | null;
-}
-
-interface SignupUser {
-    email: string;
-    password: string;
-    username: string;
-}
-
-interface LoginUser {
-    email: string;
-    password: string;
-    stayLoggedIn: boolean;
-}
-
-interface AuthResponse {
-    data: {
-        userId: string;
-        username: string;
-        email: string;
-    };
+    userId: string | null
+    username: string | null
+    email: string | null
 }
 
 export const useAuthStore = defineStore('auth', {
@@ -35,29 +15,31 @@ export const useAuthStore = defineStore('auth', {
         email: null
     }),
     actions: {
-        async signup(user: SignupUser) {
+        async signup(user: { email: string; password: string; username: string }) {
             try {
-                const response: AuthResponse = await authService.signup(user);
+                const response = await authService.signup(user)
                 // Ici, gérer la réponse et stocker les données de l'utilisateur si nécessaire
                 // Exemple:
                 // this.userId = response.data.userId;
                 // this.username = response.data.username;
                 // this.email = response.data.email;
             } catch (error) {
-                this.clearUser();
-                throw error;
+                this.clearUser()
+                throw error
             }
         },
-        async login(user: LoginUser) {
+        async login(user: { email: string; password: string; stayLoggedIn: boolean }) {
             console.log('login');
+
             try {
-                const response: AuthResponse = await authService.login(user);
+                const response = await authService.login(user);
                 // Vérifiez et accédez à la réponse en utilisant response.data
                 if (response.data && response.data.userId) {
                     this.userId = response.data.userId;
                     this.username = response.data.username;
                     this.email = response.data.email;
                     console.log(response);
+
                 } else {
                     throw new Error('Login failed');
                 }
@@ -68,15 +50,16 @@ export const useAuthStore = defineStore('auth', {
         },
         async logout() {
             try {
-                await authService.logout();
-                this.clearUser();
+                await authService.logout()
+                this.clearUser()
             } catch (error) {
-                throw error;
+                throw error
             }
         },
+        // Dans authStore.ts
         async verifyToken() {
             try {
-                const response: AuthResponse = await authService.verifyToken();
+                const response = await authService.verifyToken();
                 // Assurez-vous que la réponse contient les données attendues avant d'essayer d'y accéder
                 if (response && response.data) {
                     this.userId = response.data.userId;
@@ -92,11 +75,12 @@ export const useAuthStore = defineStore('auth', {
                 this.clearUser();
                 console.error("Erreur lors de la vérification du token: ", error);
             }
-        },
+        }
+        ,
         clearUser() {
-            this.userId = null;
-            this.username = null;
-            this.email = null;
+            this.userId = null
+            this.username = null
+            this.email = null
         }
     }
-});
+})
