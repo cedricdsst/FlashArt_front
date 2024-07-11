@@ -4,8 +4,6 @@
 
 <template>
 
-  <NavBar />
-
   <ImageIntroduction />
 
   <v-container>

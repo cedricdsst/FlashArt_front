@@ -8,7 +8,6 @@
 </style>
 
 <template>
-  <NavBar />
 
   <ImageIntroduction/>
 

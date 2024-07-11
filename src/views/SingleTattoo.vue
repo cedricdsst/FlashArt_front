@@ -1,7 +1,5 @@
 <template>
 
-  <NavBar />
-
   <Card/>
 
   <Timetable />

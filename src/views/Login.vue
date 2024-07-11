@@ -33,8 +33,6 @@ button {
 
 <template>
 
-    <NavBar />
-
     <ImageIntroduction />
 
     <v-container>

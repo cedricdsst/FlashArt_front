@@ -12,8 +12,6 @@
 
 <template>
 
-  <NavBar />
-
   <v-container>
     <div class="d-flex align-center mb-5 justify-center">
       <div>
