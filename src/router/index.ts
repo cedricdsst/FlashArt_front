@@ -22,11 +22,17 @@ const routes = [
       name: 'LoginPage',
       component: Login,
   },
-  /* {
+  {
+    path: '/dashboard/user',
+    name: 'UserPage',
+    component: User,
+    meta: { requiresAuth: true, role: 'client' },
+  },
+  {
       path: '/dashboard/tattoist',
       name: 'TattoistPage',
       component: Tattoist,
-  }, */
+  },
   {
     path: '/tattoo',
     name: 'SingleTattooPage',
@@ -43,27 +49,18 @@ const routes = [
     component: UserEditProfile,
   },
   {
+    path: '/search',
+    name: 'Search',
+    component: SearchView,
+},
+  {
     path: '/user/booked',
     name: 'UserBookedPage',
     component: UserReservation,
-    {
-        path: '/dashboard/tattoist',
-        name: 'TattoistPage',
-        component: Tattoist,
-        meta: { requiresAuth: true, role: 'artist' },
-    },
-    {
-      path: '/dashboard/user',
-      name: 'UserPage',
-      component: User,
-      meta: { requiresAuth: true, role: 'client' },
   },
-    ,
-    {
-        path: '/search',
-        name: 'Search',
-        component: SearchView,
-    },
+    
+  
+    
 ];
 
 const router = createRouter({
