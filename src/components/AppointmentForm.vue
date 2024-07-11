@@ -7,6 +7,13 @@
 <template>
   <ImageIntroduction></ImageIntroduction>
   <v-container>
+
+    <!-- Menu user -->
+    <v-select
+      label="Aller vers ..."
+      :items="['Mes informations', 'Mes reservations', 'Ajouter créneau / FlashArt']"
+    ></v-select>
+
     <v-divider><h2>Créer un créneau</h2></v-divider>
     <div class="mt-5">
       <v-form @submit.prevent="createAppointment">
