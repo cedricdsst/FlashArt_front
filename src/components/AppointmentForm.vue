@@ -1,40 +1,62 @@
+<style>
+.error {
+  color: red;
+}
+</style>
+
 <template>
-  <div>
-    <h1>Create Appointment</h1>
-    <form @submit.prevent="createAppointment">
-      <label for="date">Date:</label>
-      <input type="datetime-local" id="date" v-model="date" required><br><br>
+  <ImageIntroduction></ImageIntroduction>
+  <v-container>
+    <v-divider><h2>Créer un créneau</h2></v-divider>
+    <div class="mt-5">
+      <v-form @submit.prevent="createAppointment">
+        <div>
+          <v-label for="date">Date:</v-label>
+          <v-text-field type="datetime-local" id="date" v-model="date" required></v-text-field>
+        </div>
 
-      <!-- Sélecteur de pays -->
-      <select v-model="selectedCountry" @change="handleCountryChange">
-        <option value="">Sélectionner un pays</option>
-        <option v-for="country in countries" :key="country.code" :value="country.code">{{ country.name }}</option>
-      </select>
-      
-      <!-- Input d'autocomplétion pour l'adresse -->
-      <input type="text" v-model="searchQuery" placeholder="Entrez une adresse" @input="handleInput">
-      
-      <!-- Liste de suggestions -->
-      <ul v-if="searchResults.length > 0">
-        <li v-for="(result, index) in searchResults" :key="index" @click="selectAddress(result)">{{ result.label }}</li>
-      </ul>
+        <div>
+          <v-label for="country">Pays :</v-label><br/>
+          <!-- Sélecteur de pays -->
+          <select class="mb-3" id="country" :items="countries" item-value="code" item-text="name" v-model="selectedCountry" @change="handleCountryChange">
+            <option value="">Sélectionner un pays</option>
+            <option v-for="country in countries" :key="country.code" :value="country.code">{{ country.name }}</option>
+          </select>
+        </div>
 
-      <button type="submit">Create Appointment</button>
-    </form>
+        <div>
+          <v-label for="address">Adresse :</v-label>
+          <!-- Input d'autocomplétion pour l'adresse -->
+          <v-text-field id="address" type="text" v-model="searchQuery" placeholder="Entrez une adresse" @input="handleInput"></v-text-field>
+        </div>
 
-    <p v-if="message">{{ message }}</p>
-    <p v-if="rdvId">Appointment ID: {{ rdvId }}</p>
-  </div>
+        <!-- Liste de suggestions -->
+        <div v-if="searchResults.length > 0">
+          <v-row class="ml-1 mr-1" v-for="(result, index) in searchResults" :key="index" @click="selectAddress(result)">
+            {{ result.label }}
+            <v-divider class="mt-4 mb-4"></v-divider>
+          </v-row>
+        </div>
+
+        <v-btn class="mt-10" color="brown-darken-3" type="submit">Créer le créneau</v-btn>
+      </v-form>
+
+      <p class="mt-3 error" v-if="message">{{ message }}</p>
+      <p v-if="rdvId">Appointment ID: {{ rdvId }}</p>
+    </div>
+  </v-container>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
+import ImageIntroduction from "@/components/ImageIntroduction.vue";
 import { useRdvStore } from '@/stores/rdvStore';
 
 export default defineComponent({
   name: 'AppointmentForm',
+  components: {ImageIntroduction},
   setup() {
     const date = ref<string>('');
     const searchQuery = ref('');
@@ -131,7 +153,8 @@ export default defineComponent({
       selectAddress,
       createAppointment
     };
-  }
+  },
 });
+
 </script>
 
