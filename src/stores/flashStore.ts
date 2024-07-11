@@ -31,6 +31,16 @@ export const useFlashStore = defineStore('flash', () => {
         }
     };
 
+    const fetchFlashesByTag = async (tagName: string) => {
+        try {
+            console.log('Fetching flashes by tag:', tagName);
+            flashes.value = await getAllFlashes([tagName]);
+            console.log('Flashes fetched:', flashes.value);
+        } catch (error) {
+            console.error('Failed to fetch flashes by tag:', error);
+        }
+    };
+
     const fetchFlashById = async (flashId: string) => {
         try {
             currentFlash.value = await getFlashById(flashId);
@@ -72,6 +82,7 @@ export const useFlashStore = defineStore('flash', () => {
     return {
         flashes,
         currentFlash,
+        fetchFlashesByTag,
         fetchFlashes,
         fetchFlashById,
         createNewFlash,
