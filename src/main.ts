@@ -8,6 +8,7 @@ import Vuetify from './plugins/vuetify'
 import 'vuetify/styles'
 import '@mdi/font/css/materialdesignicons.css'
 import { registerPlugins } from '@/plugins'
+import { useAuthStore } from './stores/authStore'
 
 ;(async () => {
   const app = createApp(App)
@@ -19,7 +20,7 @@ import { registerPlugins } from '@/plugins'
 registerPlugins(app)
 
 
-  //const authStore = useAuthStore()
-  //await authStore.verifyToken()
+  const authStore = useAuthStore()
+  await authStore.verifyToken()
   app.mount('#app')
 })()

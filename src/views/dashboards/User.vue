@@ -1,7 +1,6 @@
 <template>
   <NavBar />
-  <AppointmentForm />
-  <AutoCompletion />
+  <h2>User vue</h2>
 </template>
 
 <script setup lang="ts">

@@ -21,10 +21,10 @@ export const useFlashStore = defineStore('flash', () => {
     const flashes = ref<Flash[]>([]);
     const currentFlash = ref<Flash | null>(null);
 
-    const fetchFlashes = async (tags?: string[]) => {
+    const fetchFlashes = async (tags: string, days?:number, location?:number[], km?:number) => {
         try {
             console.log('Fetching flashes...'); // Journal de débogage
-            flashes.value = await getAllFlashes(tags);
+            flashes.value = await getAllFlashes([tags], days, location, km);
             console.log('Flashes fetched:', flashes.value); // Journal de débogage
         } catch (error) {
             console.error('Failed to fetch flashes:', error);

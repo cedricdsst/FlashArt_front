@@ -22,7 +22,7 @@ export const createFlash = async (flash: Flash, file: File) => {
     formData.append('flash', JSON.stringify(flash));
     formData.append('file', file);
 
-    const response = await axios.post(`${API_URL}/create`, formData, {
+    const response = await axios.post(`${API_URL}/`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
         },
@@ -38,7 +38,7 @@ export const updateFlash = async (flash: Flash, file?: File) => {
         formData.append('file', file);
     }
 
-    const response = await axios.put(`${API_URL}/update`, formData, {
+    const response = await axios.put(`${API_URL}/`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
         },
@@ -48,16 +48,17 @@ export const updateFlash = async (flash: Flash, file?: File) => {
 };
 
 export const deleteFlash = async (flashId: string) => {
-    const response = await axios.delete(`${API_URL}/delete`, {
+    const response = await axios.delete(`${API_URL}/`, {
         data: { flashId },
     });
 
     return response.data;
 };
 
-export const getAllFlashes = async (tags?: string[]) => {
+export const getAllFlashes = async (tags?: string[], days?:number, location?:number[], km?:number) => {
+    console.log({tags,days,location,km})
     const response = await axios.get(API_URL, {
-        params: { tags: tags?.join(',') },
+        params: { tags: tags?.join(','), days: days, location: location?.join(','), km: km },
     });
 
     return response.data;
