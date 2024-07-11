@@ -1,4 +1,79 @@
-<style>
+<template>
+  <v-container>
+    <div class="d-flex align-center mb-5 justify-center">
+      <div>
+        <v-img width="75" class="rounded-circle" :src="currentUser?.image || 'https://picsum.photos/100'"></v-img>
+      </div>
+      <div class="ml-3">
+        <v-card-text class="author-name pa-0">{{ currentUser?.username }}</v-card-text>
+        <p class="location"><strong>{{ currentUser?.flash.length }}</strong> Tattoos</p>
+      </div>
+    </div>
+    <v-divider><h2>Tattoos</h2></v-divider>
+
+    <v-container class="pl-0 pr-0">
+      <v-row>
+        <v-col v-for="flash in currentUser?.flash" :key="flash._id" cols="12" sm="6" md="4">
+          <router-link :to="{ name: 'SingleTattooPage', params: { flashId: flash._id } }">
+            <v-img class="img-list" cover aspect-ratio="1" :src="flash.image"></v-img>
+          </router-link>
+        </v-col>
+      </v-row>
+    </v-container>
+
+    <!-- <v-divider><h2>Créneaux disponibles</h2></v-divider> -->
+
+    <!-- <v-container class="pl-0 pr-0">
+      <v-row>
+        <v-col v-for="rdv in currentUser?.rdvs" :key="rdv._id" cols="12" sm="6" md="4">
+          <v-card>
+            <v-img class="img-list" cover aspect-ratio="1" :src="rdv.flash_id?.image || 'https://picsum.photos/200'"></v-img>
+            <v-card-text>
+              <div class="time rounded">
+                <p class="text-center">{{ formatDate(rdv.date) }}</p>
+              </div>
+              <div class="location mt-2">
+                <p><v-icon>mdi-map-marker</v-icon> <span>{{ rdv.properties.address }}</span></p>
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container> -->
+  </v-container>
+</template>
+
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { storeToRefs } from 'pinia';
+import { useUserStore } from '@/stores/userStore';
+
+const route = useRoute();
+const userStore = useUserStore();
+const { currentUser } = storeToRefs(userStore);
+
+const fetchUserByUsername = async (username: string) => {
+  try {
+    await userStore.fetchUserByUsername(username);
+  } catch (error) {
+    console.error('Failed to fetch user:', error);
+  }
+};
+
+const formatDate = (dateString) => {
+  const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+  return new Date(dateString).toLocaleDateString('fr-FR', options);
+};
+
+onMounted(() => {
+  const username = route.params.username;
+  console.log('Fetching user with username:', username);
+  fetchUserByUsername(username);
+});
+</script>
+
+<style scoped>
 .author-name {
   font-size: 1.3rem;
   font-weight: 500;
@@ -8,76 +83,9 @@
   overflow: hidden;
   object-fit: cover;
 }
+
+.time {
+  padding: 5px;
+  background-color: rgba(61, 17, 5, 0.2);
+}
 </style>
-
-<template>
-
-  <v-container>
-    <div class="d-flex align-center mb-5 justify-center">
-      <div>
-        <v-img width="75" class="rounded-circle" src="https://picsum.photos/100"></v-img>
-      </div>
-      <div class="ml-3">
-        <v-card-text class="author-name pa-0">Jodie SABUCO</v-card-text>
-        <p class="location"><strong>29</strong> Tattoos</p>
-      </div>
-    </div>
-    <v-divider><h2>Tattoos</h2></v-divider>
-
-    <v-container class="pl-0 pr-0">
-      <v-row class="pa-0 ma-0">
-        <v-col class="pa-1 mb-1">
-          <v-img class="img-list" cover aspect-ratio="1" src="https://picsum.photos/500/1000"></v-img>
-        </v-col>
-        <v-col class="pa-1 mb-1">
-          <v-img class="img-list" cover aspect-ratio="1" src="https://picsum.photos/501"></v-img>
-        </v-col>
-      </v-row>
-      <v-row class="pa-0 ma-0">
-        <v-col class="pa-1 mb-1">
-          <v-img class="img-list" cover aspect-ratio="1" src="https://picsum.photos/502"></v-img>
-        </v-col>
-        <v-col class="pa-1 mb-1">
-          <v-img class="img-list" cover aspect-ratio="1" src="https://picsum.photos/503"></v-img>
-        </v-col>
-      </v-row>
-      <v-row class="pa-0 ma-0">
-        <v-col class="pa-1 mb-1">
-          <v-img class="img-list" cover aspect-ratio="1" src="https://picsum.photos/504"></v-img>
-        </v-col>
-        <v-col class="pa-1 mb-1">
-          <v-img class="img-list" cover aspect-ratio="1" src="https://picsum.photos/505"></v-img>
-        </v-col>
-      </v-row>
-      <v-row class="pa-0 ma-0">
-        <v-col class="pa-1 mb-1">
-          <v-img class="img-list" cover aspect-ratio="1" src="https://picsum.photos/506"></v-img>
-        </v-col>
-        <v-col class="pa-1 mb-1">
-          <v-img class="img-list" cover aspect-ratio="1" src="https://picsum.photos/507"></v-img>
-        </v-col>
-      </v-row>
-      <v-row class="pa-0 ma-0">
-        <v-col class="pa-1 mb-1">
-          <v-img class="img-list" cover aspect-ratio="1" src="https://picsum.photos/508"></v-img>
-        </v-col>
-        <v-col class="pa-1 mb-1">
-          <v-img class="img-list" cover aspect-ratio="1" src="https://picsum.photos/509"></v-img>
-        </v-col>
-      </v-row>
-      <v-row class="pa-0 ma-0">
-        <v-col class="pa-1 mb-1">
-          <v-img class="img-list" cover aspect-ratio="1" src="https://picsum.photos/300/3200"></v-img>
-        </v-col>
-        <v-col class="pa-1 mb-1">
-          <v-img class="img-list" cover aspect-ratio="1" src="https://picsum.photos/511"></v-img>
-        </v-col>
-      </v-row>
-    </v-container>
-
-
-  </v-container>
-</template>
-<script setup lang="ts">
-
-</script>

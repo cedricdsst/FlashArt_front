@@ -35,9 +35,10 @@ const routes = [
     props: true
   },
   {
-    path: '/tattooist',
+    path: '/profile/:username',
     name: 'SingleTattooistPage',
     component: SingleTattooist,
+    props: true
   },
   {
     path: '/user/edit',

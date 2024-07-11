@@ -20,22 +20,27 @@
       width="100%"
       class="pt-2 pb-1 d-flex justify-space-between align-center"
     >
-      <v-container class="pa-0 d-flex align-center">
-        <div>
-          <v-img
-            :width="45"
-            aspect-ratio="1/1"
-            class="profile-img rounded-circle"
-            src="https://img.freepik.com/photos-gratuite/portrait-homme-riant_23-2148859448.jpg?size=338&ext=jpg&ga=GA1.1.1413502914.1720310400&semt=ais_user"
-          ></v-img>
-        </div>
-        <div class="pl-4">
-          <v-card-text class="pa-0">
-            {{ flash.user_id.firstname }} {{ flash.user_id.lastname }}
-          </v-card-text>
-          <p class="location"><v-icon>mdi-map-marker</v-icon> Lyon</p>
-        </div>
-      </v-container>
+    <router-link 
+    :to="{ name: 'SingleTattooistPage', params: { username: flash.user_id.username } }" 
+    class="text-decoration-none custom-link"
+  >
+    <v-container class="pa-0 d-flex align-center clickable-container">
+      <div>
+        <v-img
+          :width="45"
+          aspect-ratio="1/1"
+          class="profile-img rounded-circle"
+          :src="flash.user_id.image || 'https://img.freepik.com/photos-gratuite/portrait-homme-riant_23-2148859448.jpg?size=338&ext=jpg&ga=GA1.1.1413502914.1720310400&semt=ais_user'"
+        ></v-img>
+      </div>
+      <div class="pl-4">
+        <v-card-text class="pa-0">
+          {{ flash.user_id.firstname }} {{ flash.user_id.lastname }}
+        </v-card-text>
+        <p class="location"><v-icon>mdi-map-marker</v-icon> Lyon</p>
+      </div>
+    </v-container>
+  </router-link>
       <p class="pa-0 text-right start-at">
         à partir de<br /><span class="price">{{ flash.price }} €</span>
       </p>

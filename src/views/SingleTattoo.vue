@@ -30,6 +30,8 @@ import { useRdvStore } from '../stores/rdvStore'; // Adjust the import path as n
 import Card from '../components/Card.vue'; // Adjust the import path as necessary
 import Timetable from '../components/Timetable.vue'; // Adjust the import path as necessary
 
+console.log('SingleTattoo component setup initialized'); // Verify setup initialization
+
 const route = useRoute();
 const flashStore = useFlashStore();
 const rdvStore = useRdvStore();
@@ -39,26 +41,30 @@ const notification = ref({ message: '', type: '' });
 
 const fetchData = async () => {
   const flashId = route.params.flashId;
-  console.log('flashId:', flashId); // Debug log to check flashId
+  console.log('Fetching data for flash ID:', flashId); // Debug log to check flashId
 
   await flashStore.fetchFlashById(flashId);
-  console.log('currentFlash:', currentFlash.value); // Debug log to check currentFlash
+  console.log('Fetched flash data:', currentFlash.value); // Debug log to check currentFlash
 };
 
 onMounted(fetchData);
 
 const book = async (rdvId) => {
+  console.log('Book method called for RDV ID:', rdvId);
   try {
     await rdvStore.bookExistingRdv(rdvId, currentFlash.value._id);
     notification.value = { message: 'RDV booked successfully!', type: 'success' };
+    console.log('RDV booked successfully');
     await fetchData(); // Refetch the data after booking
   } catch (error) {
+    console.error('Failed to book RDV:', error);
     notification.value = { message: 'Failed to book RDV.', type: 'error' };
   }
   setTimeout(clearNotification, 4000); // Clear notification after 4 seconds
 };
 
 const clearNotification = () => {
+  console.log('Clearing notification');
   notification.value = { message: '', type: '' };
 };
 </script>
