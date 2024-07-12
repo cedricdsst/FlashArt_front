@@ -7,6 +7,7 @@ import SingleTattoo from '@/views/SingleTattoo.vue';
 import SingleTattooist from '@/views/SingleTattooist.vue';
 import UserEditProfile from '@/views/user/UserEditProfile.vue';
 import UserReservation from '@/views/user/UserReservation.vue';
+import UserSingleReservation from '@/views/user/UserSingleReservation.vue';
 import SearchView from '../views/SearchView.vue';
 import { useAuthStore } from '@/stores/authStore';
 
@@ -63,6 +64,12 @@ const routes = [
     path: '/user/booked',
     name: 'UserBookedPage',
     component: UserReservation,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/user/booked/:id',
+    name: 'UserSingleBookedPage',
+    component: UserSingleReservation,
     meta: { requiresAuth: true }
   },
     
