@@ -11,19 +11,24 @@
     <h2>Créneaux reservés</h2>
 
     <v-row v-for="rdv in rdvs" :key="rdv._id" align="center" class="mt-1">
-      <v-col class="v-col-4">
+      <router-link 
+    :to="{ name: 'UserSingleBookedPage', params: { id: rdv._id } }" 
+    class="text-decoration-none custom-link v-col v-col-4"
+  >
+      <div>
         <v-img cover aspect-ratio="1" :src="rdv.flash_id.image"></v-img>
-      </v-col>
-      <v-col class="v-col-4">
+      </div>
+      <div>
         <div class="time rounded">
           <p class="text-center">{{ formatDate(rdv.date) }}</p>
         </div>
-      </v-col>
-      <v-col>
-        <div class="location v-col-auto pa-0">
+      </div>
+      <div>
+        <div class="location pa-0">
           <p><v-icon>mdi-map-marker</v-icon> <span>{{ rdv.properties.address }}</span></p>
         </div>
-      </v-col>
+      </div>
+      </router-link>
     </v-row>
   </v-container>
 </template>
