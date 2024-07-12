@@ -35,7 +35,7 @@ export const useAuthStore = defineStore('auth', {
             }
         },
         async login(user: { email: string; password: string; stayLoggedIn: boolean }) {
-            console.log('login');
+            
 
             try {
                 const response = await authService.login(user);
@@ -47,7 +47,6 @@ export const useAuthStore = defineStore('auth', {
                     this.lastname = response.data.lastname;
                     this.email = response.data.email;
                     this.role = response.data.role;
-                    console.log(response);
 
                 } else {
                     throw new Error('Login failed');
