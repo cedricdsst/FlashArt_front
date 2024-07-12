@@ -13,7 +13,8 @@
 
     <div v-if="currentFlash">
       <Card :flash="currentFlash" />
-      <Timetable :rdvs="currentFlash.user_id.rdv_ids" :flashId="currentFlash._id" @book="book" />
+      <Timetable v-if="currentFlash.available" :rdvs="currentFlash.user_id.rdv_ids" :flashId="currentFlash._id" @book="book" />
+      
     </div>
     <div v-else>
       <p>Loading...</p>

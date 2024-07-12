@@ -7,6 +7,7 @@
         :to="{ name: 'SingleTattooPage', params: { flashId: flash._id } }"
         class="grid-item"
       >
+      <p v-if="!flash.available" style="position:absolute; z-index:2000; transform:translateY(200%)">NON DISPONIBLE</p>
         <v-img
           :src="flash.image"
           :aspect-ratio="1"
