@@ -67,7 +67,7 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
-    path: '/user/booked/:id',
+    path: '/dashboard/user/:id',
     name: 'UserSingleBookedPage',
     component: UserSingleReservation,
     meta: { requiresAuth: true }
