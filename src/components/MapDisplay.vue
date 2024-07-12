@@ -1,8 +1,8 @@
 <template>
   <div>
     <div v-if="currentRdv">
-      <p><strong>Adresse:</strong> {{ currentRdv.properties.address }}</p>
-      <p><strong>Date:</strong> {{ formatDate(currentRdv.date) }}</p>
+      <p class="mb-5"><strong>Adresse:</strong> {{ currentRdv.properties.address }}</p>
+      <p class="mb-5"><strong>Date:</strong> {{ formatDate(currentRdv.date) }}</p>
     </div>
     <div id="map" style="height: 400px;"></div>
   </div>
@@ -12,7 +12,7 @@
 import { defineComponent, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRoute } from 'vue-router';
-import L from 'leaflet';  
+import L from 'leaflet';
 import { useRdvStore } from '@/stores/rdvStore';
 
 export default defineComponent({
