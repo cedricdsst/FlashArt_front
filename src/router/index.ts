@@ -15,7 +15,8 @@ const routes = [
       path: '/',
       name: 'home',
       component: HomeView,
-      props: route => ({ tags: route.query.tags })
+      props: route => ({ tags: route.query.tags }),
+      
     },
     {
       path: '/login',
@@ -73,6 +74,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
+  document.title = to.meta.title || 'FlashArt';
   if (to.matched.some(record => record.meta.requiresAuth)) {
     // Vérifier si l'utilisateur est authentifié
     if (!authStore.userId) {
@@ -80,9 +82,7 @@ router.beforeEach((to, from, next) => {
     } else if (to.meta.role && authStore.role !== to.meta.role) {
       // Vérifier si l'utilisateur a le rôle requis
       next({ name: 'home' }); // Ou une autre route pour gérer les accès refusés
-    } else {
-      next();
-    }
+    } 
   } else {
     next();
   }
