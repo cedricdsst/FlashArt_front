@@ -5,6 +5,24 @@
     margin: 0 auto;
   }
 }
+
+* {
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+.custom-link {
+  color: inherit;
+  text-decoration: none;
+}
+.custom-link:hover {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+
 </style>
 
 <template>

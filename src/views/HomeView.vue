@@ -3,8 +3,8 @@
 
   <h2 class="text-center pa-7">Les plus populaires</h2>
 
-  <v-row>
-    <v-col
+
+    <v-for
       v-for="flash in flashes"
       :key="flash._id"
       cols="12"
@@ -13,8 +13,8 @@
       style="cursor: pointer;"
     >
       <Card :flash="flash" />
-    </v-col>
-  </v-row>
+    </v-for>
+
 </template>
 
 <script setup lang="ts">
