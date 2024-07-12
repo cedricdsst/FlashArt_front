@@ -142,27 +142,23 @@
       </div>
     </div>
 
+    <!-- Partie flash -->
     <div v-if="selectedSection === 'Flash'">
       <v-divider><h2>Liste des Flashs</h2></v-divider>
 
-      <div v-if="flashStore.flashes.length === 0" class="text-center my-5">
+      <div v-if="currentUser.flash.length === 0" class="text-center my-5">
         <p>Vous n'avez aucun flash pour le moment.</p>
       </div>
 
       <div v-else>
         <v-row
-          v-for="flash in flashStore.flashes"
-          :key="flash.user_id"
+          v-for="flash in currentUser.flash"
+          :key="flash._id"
           align="center"
           class="mt-1"
         >
           <v-col class="v-col-4">
             <v-img cover aspect-ratio="1" :src="flash.image"></v-img>
-          </v-col>
-          <v-col class="v-col-4">
-            <div class="time rounded">
-              <p class="text-center">{{ formatPrice(flash.price) }}</p>
-            </div>
           </v-col>
           <v-col>
             <div class="location v-col-auto pa-0">
@@ -218,20 +214,36 @@ export default defineComponent({
     const authStore = useAuthStore();
     const flashStore = useFlashStore();
     const userStore = useUserStore();
-    const { rdvs } = storeToRefs(userStore);
+    const { rdvs } = storeToRefs(rdvStore);
+    const { currentUser } = storeToRefs(userStore);
     let searchTimer: ReturnType<typeof setTimeout> | null = null;
 
     const fetchRdvsArtist = async () => {
       try {
         console.log("Fetching RDVs for artist...");
         await rdvStore.fetchRdvsArtist();
-        console.log("Fetched RDVs:", rdvs.value);
-        console.log("Fetched RDV image:", rdvs.flash_id.image);
+        // console.log("Fetched RDVs:", rdvs.value);
+        // console.log("Fetched RDV image:", rdvs.flash_id.image);
       } catch (error) {
         console.error("Failed to fetch RDVs:", error);
       }
     };
-    onMounted(fetchRdvsArtist);
+
+    const fetchUserFlash = async () => {
+      try {
+        console.log("Fetching Users...");
+        await userStore.fetchUserByUsername(authStore.username);
+        console.log("Fetched User:", currentUser.value);
+        // console.log("Fetched User flash:", userStore.flash.value);
+      } catch (error) {
+        console.error("Failed to fetch User:", error);
+      }
+    };
+
+    onMounted(() => {
+      fetchRdvsArtist();
+      fetchUserFlash();
+    });
 
     const formatDate = (dateString) => {
       const options = {
@@ -342,8 +354,10 @@ export default defineComponent({
       authStore,
       rdvStore,
       flashStore,
+      userStore,
       formatPrice,
       formatDate,
+      currentUser,
     };
   },
 });
