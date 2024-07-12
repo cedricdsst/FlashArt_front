@@ -11,7 +11,7 @@
     <v-select
       v-model="selectedSection"
       label="Aller vers ..."
-      :items="['Mes informations', 'Créneaux', 'FlashArt']"
+      :items="['Mes informations', 'Créneaux', 'Flash']"
     ></v-select>
 
     <div v-if="selectedSection === 'Mes informations'">
@@ -40,7 +40,7 @@
     </div>
 
     <div v-if="selectedSection === 'Créneaux'">
-      <v-divider><h2>Liste des RDVS</h2></v-divider>
+      <v-divider><h2>Liste des RDV</h2></v-divider>
 
       <div v-if="rdvStore.rdvs.length === 0" class="text-center my-5">
         <p>Aucun rendez-vous n'est disponible pour le moment.</p>
@@ -147,37 +147,7 @@
       </div>
     </div>
 
-    <!--     <div v-else>
-      <v-row
-        v-for="rdv in rdvStore.rdvs"
-        :key="rdv._id"
-        align="center"
-        class="mt-1"
-      >
-        <v-col class="v-col-4">
-          <v-img
-            cover
-            aspect-ratio="1"
-            src="https://picsum.photos/200/100"
-          ></v-img>
-        </v-col>
-        <v-col class="v-col-4">
-          <div class="time rounded">
-            <p class="text-center">{{ formatDate(rdv.date) }}</p>
-          </div>
-        </v-col>
-        <v-col>
-          <div class="location v-col-auto pa-0">
-            <p>
-              <v-icon>mdi-map-marker</v-icon>
-              <span>{{ rdv.properties.address }}</span>
-            </p>
-          </div>
-        </v-col>
-      </v-row>
-    </div> -->
-
-    <div v-if="selectedSection === 'FlashArt'">
+    <div v-if="selectedSection === 'Flash'">
       <v-divider><h2>Liste des Flashs</h2></v-divider>
 
       <div v-if="flashStore.flashes.length === 0" class="text-center my-5">
@@ -213,7 +183,7 @@
           </v-col>
         </v-row>
       </div>
-      <flashForm />
+      <flashForm></flashForm>
     </div>
   </v-container>
 </template>
@@ -224,9 +194,8 @@ import { useRouter } from "vue-router";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
 import ImageIntroduction from "@/components/ImageIntroduction.vue";
 import { useRdvStore } from "@/stores/rdvStore";
-import { useFlashStore } from "@/stores/flashStore";
-import { useUserStore } from "@/stores/userStore";
 import { useAuthStore } from "@/stores/authStore";
+import { useFlashStore } from "@/stores/flashStore";
 
 export default defineComponent({
   name: "AppointmentForm",
@@ -242,21 +211,20 @@ export default defineComponent({
       { code: "es", name: "Espagne" },
     ];
 
-    const selectedSection = ref("Mes informations");
     const message = ref<string>("");
     const rdvId = ref<string | null>(null);
 
+    const selectedSection = ref("Mes informations");
     const router = useRouter();
     const rdvStore = useRdvStore();
-    const flashStore = useFlashStore();
-    const userStore = useUserStore();
     const authStore = useAuthStore();
+    const flashStore = useFlashStore();
     let searchTimer: ReturnType<typeof setTimeout> | null = null;
 
     onMounted(async () => {
       if (selectedSection.value === "Créneaux") {
         await rdvStore.fetchRdvsArtist();
-      } else if (selectedSection.value === "FlashArt") {
+      } else if (selectedSection.value === "Flash") {
         await flashStore.fetchFlashesArtist();
       }
     });
@@ -271,7 +239,6 @@ export default defineComponent({
       const date = new Date(dateString);
       return date.toLocaleString(); // Vous pouvez personnaliser le format ici
     };
-
     const handleInput = async () => {
       if (!selectedCountry.value || searchQuery.value.trim() === "") {
         searchResults.value = [];
@@ -354,12 +321,11 @@ export default defineComponent({
       selectAddress,
       createAppointment,
       selectedSection,
+      authStore,
       rdvStore,
-      formatDate,
       flashStore,
       formatPrice,
-      userStore,
-      authStore,
+      formatDate,
     };
   },
 });

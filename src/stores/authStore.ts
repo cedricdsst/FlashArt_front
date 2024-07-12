@@ -43,6 +43,8 @@ export const useAuthStore = defineStore('auth', {
                 if (response.data && response.data.userId) {
                     this.userId = response.data.userId;
                     this.username = response.data.username;
+                    this.firstname = response.data.firstname;
+                    this.lastname = response.data.lastname;
                     this.email = response.data.email;
                     this.role = response.data.role;
                     console.log(response);

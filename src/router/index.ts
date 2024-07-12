@@ -34,7 +34,6 @@ const routes = [
     name: 'TattoistPage',
     component: Tattoist,
     meta: { requiresAuth: true, role: 'artist' },
-
   },
   {
     path: '/tattoo',
