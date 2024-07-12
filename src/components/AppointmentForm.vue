@@ -141,7 +141,7 @@ export default defineComponent({
         rdvId.value = response._id; // assuming response contains the created rdv object with _id
       } catch (error) {
         console.error('Error:', error);
-        message.value = 'Erreur lors de la création de rendez-vous';
+        //message.value = 'Erreur lors de la création de rendez-vous';
       }
     };
 

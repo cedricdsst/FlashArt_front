@@ -5,6 +5,7 @@
       :aspect-ratio="1/1"
       :src="flash.image"
       :alt="flash.tags.map((tag) => tag.name).join(', ')"
+      cover
     ></v-img>
     <v-container class="tags-container pt-4 pb-0 ma-0">
       <span

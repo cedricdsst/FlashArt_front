@@ -14,7 +14,7 @@
     <v-container class="pl-0 pr-0">
       <v-row>
         <v-col v-for="flash in currentUser?.flash" :key="flash._id" cols="12" sm="6" md="4">
-          <router-link :to="{ name: 'SingleTattooPage', params: { flashId: flash._id } }">
+          <router-link :to="{ name: 'SingleTattooPage', params: { flashId: flash.id } }">
             <v-img class="img-list" cover aspect-ratio="1" :src="flash.image"></v-img>
           </router-link>
         </v-col>

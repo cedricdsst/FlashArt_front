@@ -30,7 +30,7 @@ import { useRdvStore } from '../stores/rdvStore'; // Adjust the import path as n
 import Card from '../components/Card.vue'; // Adjust the import path as necessary
 import Timetable from '../components/Timetable.vue'; // Adjust the import path as necessary
 
-console.log('SingleTattoo component setup initialized'); // Verify setup initialization
+console.log('SingleTattoo component setup initialized'); 
 
 const route = useRoute();
 const flashStore = useFlashStore();
