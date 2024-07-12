@@ -22,8 +22,8 @@ import { onBeforeMount } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
 import { useFlashStore } from '../stores/flashStore';
-import ImageIntroduction from '../components/ImageIntroduction.vue'; // Adjust the import path as necessary
-import Card from '../components/Card.vue'; // Adjust the import path as necessary
+import ImageIntroduction from '../components/ImageIntroduction.vue'; 
+import Card from '../components/Card.vue'; 
 
 const flashStore = useFlashStore();
 const { flashes } = storeToRefs(flashStore);

@@ -69,7 +69,7 @@ export const useRdvStore = defineStore('rdv', () => {
             }
         } catch (error) {
             console.error('Failed to book RDV:', error);
-            throw error; // Re-throw the error to be caught in the component
+            throw error;
         }
     };
 
