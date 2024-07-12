@@ -2,8 +2,10 @@
 <template>
   <v-container>
     <h2>User vue</h2>
-    
-    <LogoutButton class="mt-4" />
+
+    <div class="d-flex justify-center gap-4">
+      <LogoutButton class="mt-4" />
+    </div>
   </v-container>
 </template>
 
