@@ -6,10 +6,10 @@
   }
 }
 
-* {
+/* * {
   overflow-x: hidden;
   overflow-y: hidden;
-}
+} */
 
 .custom-link {
   color: inherit;
@@ -20,9 +20,6 @@
   text-decoration: none;
   cursor: pointer;
 }
-
-
-
 </style>
 
 <template>
