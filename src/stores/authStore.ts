@@ -5,6 +5,8 @@ import { authService } from '../services/authService'
 interface UserState {
     userId: string | null
     username: string | null
+    firstname: string | null
+    lastname: string | null
     email: string | null
     role: string | null
 }
@@ -13,6 +15,8 @@ export const useAuthStore = defineStore('auth', {
     state: (): UserState => ({
         userId: null,
         username: null,
+        firstname: null,
+        lastname: null,
         email: null,
         role: null
     }),
@@ -67,6 +71,8 @@ export const useAuthStore = defineStore('auth', {
                 if (response && response.data) {
                     this.userId = response.data.userId;
                     this.username = response.data.username;
+                    this.firstname = response.data.firstname;
+                    this.lastname = response.data.lastname;
                     this.email = response.data.email;
                     this.role = response.data.role;
                 } else {

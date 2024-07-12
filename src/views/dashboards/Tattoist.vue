@@ -1,7 +1,6 @@
 <template>
   <AppointmentForm />
 
-  <flashForm />
   <!-- <MapDisplay /> -->
   <div class="d-flex justify-center gap-4">
     <LogoutButton class="mt-4" />
