@@ -4,7 +4,7 @@
       v-model="selectedTags"
       clearable
       chips
-      label="Rechercher..."
+      label="Selectionner un filtre..."
       :items="tagItems"
       multiple
     ></v-autocomplete>
@@ -20,16 +20,16 @@
         {{ option.label }}
       </v-btn>
     </div>
-    
-    <br>
+
+    <br />
     <v-row align="center">
-    <v-col cols="auto">
-      <v-btn @click="getLocation">Get Location</v-btn>
-    </v-col>
-    <v-col>
-      <p v-if="userLocationCity" class="bold">{{ userLocationCity }}</p>
-    </v-col>
-  </v-row>
+      <v-col cols="auto">
+        <v-btn @click="getLocation">Se Localiser</v-btn>
+      </v-col>
+      <v-col>
+        <p v-if="userLocationCity" class="bold">{{ userLocationCity }}</p>
+      </v-col>
+    </v-row>
     <v-slider
       v-if="userLocation"
       v-model="selectedKm"
@@ -37,21 +37,19 @@
       :max="150"
       :step="1"
     >
-      <template v-slot:label class="bold">
-        {{ selectedKm }} Km
-      </template>
+      <template v-slot:label class="bold"> {{ selectedKm }} Km </template>
     </v-slider>
-    
-    
-    <br>
-    <br>
+
+    <br />
+    <br />
     <v-row justify="center">
-    <v-col cols="auto" style="padding-top:0px">
-      <v-btn @click="onSubmitSearch">Submit Search</v-btn>
-      <p v-if="flashCount !== null" align="center" class="flash-count">{{ flashCount }} flash(s)</p>
-    </v-col>
-  </v-row>
-    
+      <v-col cols="auto" style="padding-top: 0px">
+        <v-btn @click="onSubmitSearch">Rechercher</v-btn>
+        <p v-if="flashCount !== null" align="center" class="flash-count">
+          {{ flashCount }} flash(s)
+        </p>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -74,9 +72,9 @@ const userLocationCity = ref<string | null>(null);
 const flashCount = ref<number | null>(null);
 
 const dayOptions = [
-  { label: 'Demain', value: 1 },
+  { label: "Demain", value: 1 },
   { label: "7 Jours", value: 7 },
-  { label: "30 Jours", value: 30 }
+  { label: "30 Jours", value: 30 },
 ];
 
 const tagItems = computed(() => {
@@ -135,11 +133,11 @@ const fetchCityName = async (location: [number, number]) => {
       response.data.address.city ||
       response.data.address.town ||
       response.data.address.village ||
-      "Unknown location";
+      "Localisation inconnue";
     console.log("User Location City:", userLocationCity.value);
   } catch (error) {
     console.error("Error fetching city name:", error);
-    userLocationCity.value = "Unknown location";
+    userLocationCity.value = `${location[1]} | ${location[0]}`;
   }
 };
 </script>
@@ -155,12 +153,11 @@ const fetchCityName = async (location: [number, number]) => {
   margin-bottom: 5px;
 }
 
-.flash-count{
+.flash-count {
   margin-top: 2px;
-  
 }
 
-.bold{
+.bold {
   font-weight: bold;
 }
 </style>
