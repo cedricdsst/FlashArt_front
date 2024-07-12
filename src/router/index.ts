@@ -26,7 +26,7 @@ const routes = [
   {
     path: '/dashboard/user',
     name: 'UserPage',
-    component: User,
+    component: UserEditProfile,
     meta: { requiresAuth: true, role: 'client' },
   },
   {
