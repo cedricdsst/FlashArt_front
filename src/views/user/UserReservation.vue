@@ -15,7 +15,7 @@
 
 
 
-    <h2>Créneaux reservés</h2>
+    <h2>Créneaux réservés</h2>
 
     <v-row v-for="rdv in rdvs" :key="rdv._id" width="100%" class="mt-1 d-block">
       <router-link
