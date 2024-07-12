@@ -9,6 +9,7 @@ import 'vuetify/styles'
 import '@mdi/font/css/materialdesignicons.css'
 import { registerPlugins } from '@/plugins'
 import { useAuthStore } from './stores/authStore'
+import 'leaflet/dist/leaflet.css'
 
 ;(async () => {
   const app = createApp(App)
