@@ -32,6 +32,7 @@ const routes = [
     path: '/dashboard/tattoist',
     name: 'TattoistPage',
     component: Tattoist,
+    meta: { requiresAuth: true, role: 'artist' },
   },
   {
     path: '/tattoo',
@@ -71,6 +72,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
+  document.title = to.meta.title || 'FlashArt';
   if (to.matched.some(record => record.meta.requiresAuth)) {
     // Vérifier si l'utilisateur est authentifié
     if (!authStore.userId) {
