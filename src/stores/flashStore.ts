@@ -21,13 +21,11 @@ export const useFlashStore = defineStore('flash', () => {
     const flashes = ref<Flash[]>([]);
     const currentFlash = ref<Flash | null>(null);
 
-
-
     const fetchFlashes = async (tags: string, days?: number, location?: number[], km?: number) => {
         try {
-            console.log('Fetching flashes...'); // Journal de débogage
+            console.log('Fetching flashes...'); // Debug log
             flashes.value = await getAllFlashes([tags], days, location, km);
-            console.log('Flashes fetched:', flashes.value); // Journal de débogage
+            console.log('Flashes fetched:', flashes.value); // Debug log
         } catch (error) {
             console.error('Failed to fetch flashes:', error);
         }
@@ -81,6 +79,10 @@ export const useFlashStore = defineStore('flash', () => {
         }
     };
 
+    const clearFlashes = () => {
+        flashes.value = [];
+    };
+
     return {
         flashes,
         currentFlash,
@@ -90,5 +92,6 @@ export const useFlashStore = defineStore('flash', () => {
         createNewFlash,
         updateExistingFlash,
         deleteExistingFlash,
+        clearFlashes,
     };
 });

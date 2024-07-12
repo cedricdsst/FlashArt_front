@@ -7,7 +7,7 @@ import SingleTattoo from '@/views/SingleTattoo.vue';
 import SingleTattooist from '@/views/SingleTattooist.vue';
 import UserEditProfile from '@/views/user/UserEditProfile.vue';
 import UserReservation from '@/views/user/UserReservation.vue';
-import SearchView from '../views/SearchView.vue'
+import SearchView from '../views/SearchView.vue';
 import { useAuthStore } from '@/stores/authStore';
 
 const routes = [
@@ -36,20 +36,24 @@ const routes = [
     meta: { requiresAuth: true, role: 'artist' },
   },
   {
-    path: '/tattoo',
+    path: '/tattoo/:flashId',
     name: 'SingleTattooPage',
     component: SingleTattoo,
+    props: true
   },
   {
-    path: '/tattooist',
+    path: '/profile/:username',
     name: 'SingleTattooistPage',
     component: SingleTattooist,
+    props: true
   },
   {
     path: '/user/edit',
     name: 'UserEditInformationPage',
     component: UserEditProfile,
+    meta: { requiresAuth: true }
   },
+  
   {
     path: '/search',
     name: 'Search',
@@ -59,6 +63,7 @@ const routes = [
     path: '/user/booked',
     name: 'UserBookedPage',
     component: UserReservation,
+    meta: { requiresAuth: true }
   },
     
   
@@ -66,8 +71,12 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(process.env.BASE_URL),
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    // always scroll to top
+    return { top: 0 };
+  },
 });
 
 router.beforeEach(async (to, from, next) => {

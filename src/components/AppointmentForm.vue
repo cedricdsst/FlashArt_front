@@ -1,9 +1,3 @@
-<style>
-.error {
-  color: red;
-}
-</style>
-
 <template>
   <ImageIntroduction></ImageIntroduction>
   <v-container>
@@ -213,6 +207,7 @@ export default defineComponent({
 
     const message = ref<string>("");
     const rdvId = ref<string | null>(null);
+    const selectedCity = ref<string>('');
 
     const selectedSection = ref("Mes informations");
     const router = useRouter();
@@ -271,9 +266,11 @@ export default defineComponent({
     let latitude = 0;
     const selectAddress = (result) => {
       searchQuery.value = result.label;
-      console.log(result.x);
       longitude = result.x;
       latitude = result.y;
+
+      // Extract the city from the result object
+      selectedCity.value = result.raw.address.city || result.raw.address.town || result.raw.address.village || 'Unknown city';
     };
 
     const createAppointment = async () => {
@@ -299,12 +296,12 @@ export default defineComponent({
           },
         };
 
-        await rdvStore.createNewRdv(appointmentObject);
-        message.value = "Le rendez-vous a été créé!";
-        rdvId.value = appointmentObject._id;
+        const response = await rdvStore.createNewRdv(appointmentObject);
+        message.value = 'Le rendez-vous a été créé!';
+        rdvId.value = response._id; // assuming response contains the created rdv object with _id
       } catch (error) {
-        console.error("Error:", error);
-        message.value = "Erreur lors de la création de rendez-vous";
+        console.error('Error:', error);
+        //message.value = 'Erreur lors de la création de rendez-vous';
       }
     };
 

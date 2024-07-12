@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { createRdv, bookRdv, getAllRdvsArtist,getAllRdvsClient, getRdvById, updateRdvById, deleteRdvById } from '@/services/rdvService';
+import { createRdv, bookRdv, getAllRdvsArtist, getAllRdvsClient, getRdvById, updateRdvById, deleteRdvById } from '@/services/rdvService';
 
 interface Location {
     type: string;
@@ -60,7 +60,7 @@ export const useRdvStore = defineStore('rdv', () => {
         }
     };
 
-    const bookExistingRdv = async (rdvId: string, flashId: string) => {
+    const bookExistingRdv = async (rdvId, flashId) => {
         try {
             const bookedRdv = await bookRdv(rdvId, flashId);
             const index = rdvs.value.findIndex(r => r._id === bookedRdv.rdv._id);
@@ -69,6 +69,7 @@ export const useRdvStore = defineStore('rdv', () => {
             }
         } catch (error) {
             console.error('Failed to book RDV:', error);
+            throw error; // Re-throw the error to be caught in the component
         }
     };
 

@@ -1,46 +1,63 @@
-<style scoped>
-
-.time {
-  padding: 5px;
-  background-color: rgba(61, 17, 5, 0.2);
-}
-
-</style>
-
 <template>
-
-  <ImageIntroduction/>
+  <ImageIntroduction />
 
   <v-container>
-
     <!-- Menu user -->
-    <v-select
+    <!-- <v-select
       label="Aller vers ..."
       :items="['Mes informations', 'Mes reservations']"
-    ></v-select>
+    ></v-select> -->
 
     <h2>Créneaux reservés</h2>
 
-    <v-row v-for="index in 5" :key="index" align="center" class="mt-1">
+    <v-row v-for="rdv in rdvs" :key="rdv._id" align="center" class="mt-1">
       <v-col class="v-col-4">
-        <v-img cover aspect-ratio="1" src="https://picsum.photos/200/100"></v-img>
+        <v-img cover aspect-ratio="1" :src="rdv.flash_id.image"></v-img>
       </v-col>
       <v-col class="v-col-4">
         <div class="time rounded">
-          <p class="text-center">01/07/25 08:00</p>
+          <p class="text-center">{{ formatDate(rdv.date) }}</p>
         </div>
       </v-col>
       <v-col>
         <div class="location v-col-auto pa-0">
-          <p><v-icon>mdi-map-marker</v-icon> <span>Marseille</span></p>
+          <p><v-icon>mdi-map-marker</v-icon> <span>{{ rdv.properties.address }}</span></p>
         </div>
       </v-col>
     </v-row>
   </v-container>
-
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import { storeToRefs } from 'pinia';
 import ImageIntroduction from "@/components/ImageIntroduction.vue";
-import NavBar from "@/components/NavBar.vue";
+import { useRdvStore } from '@/stores/rdvStore';
+
+const rdvStore = useRdvStore();
+const { rdvs } = storeToRefs(rdvStore);
+
+const fetchRdvsClient = async () => {
+  try {
+    console.log('Fetching RDVs for client...');
+    await rdvStore.fetchRdvsClient();
+    console.log('Fetched RDVs:', rdvs.value);
+  } catch (error) {
+    console.error('Failed to fetch RDVs:', error);
+  }
+};
+
+const formatDate = (dateString) => {
+  const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+  return new Date(dateString).toLocaleDateString('fr-FR', options);
+};
+
+onMounted(fetchRdvsClient);
 </script>
+
+<style scoped>
+.time {
+  padding: 5px;
+  background-color: rgba(61, 17, 5, 0.2);
+}
+</style>
