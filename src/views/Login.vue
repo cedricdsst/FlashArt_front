@@ -66,30 +66,13 @@ export default defineComponent({
   methods: {
     async login() {
       try {
-        const response = await fetch(apiUrl + "/auth/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: this.email,
-            password: this.password,
-          }),
-          credentials: "include",
-        });
-        const responseData = await response.json();
-        console.log(responseData);
-        if (!response.ok) {
-          throw new Error("Identifiants incorrects");
-        }
-        // Utiliser le store d'authentification
+        // store d'authentification
         const authStore = useAuthStore();
         await authStore.login({
           email: this.email,
           password: this.password,
           stayLoggedIn: true,
         });
-        //await authStore.setUser(responseData.user); // Supposons que la réponse contient les données de l'utilisateur
 
         // Redirection basée sur le rôle
         if (authStore.role === "artist") {

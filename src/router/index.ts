@@ -70,21 +70,25 @@ const router = createRouter({
   routes,
 });
 
-
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore();
   document.title = to.meta.title || 'FlashArt';
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    // Vérifier si l'utilisateur est authentifié
-    if (!authStore.userId) {
-      next({ name: 'LoginPage' });
-    } else if (to.meta.role && authStore.role !== to.meta.role) {
-      // Vérifier si l'utilisateur a le rôle requis
-      next({ name: 'home' }); // Ou une autre route pour gérer les accès refusés
-    } 
+  if (!authStore.userId) {
+    await authStore.verifyToken();
+  }
+
+  const requiresAuth = to.meta.requiresAuth;
+  const userRole = authStore.role;
+  const isAuthenticated = authStore.userId ? true : false;
+
+  if (requiresAuth && !isAuthenticated) {
+    next({ name: 'LoginPage' });
+  } else if (requiresAuth && to.meta.role && to.meta.role !== userRole) {
+    next({ name: 'home' }); 
   } else {
-    next();
+    next(); 
   }
 });
+
 
 export default router;
