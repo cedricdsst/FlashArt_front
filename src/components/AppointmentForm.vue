@@ -43,16 +43,17 @@
       <div v-else>
         <v-row
           v-for="rdv in rdvStore.rdvs"
-          :key="rdv._id"
+          :key="rdv.artist_id"
           align="center"
           class="mt-1"
         >
           <v-col class="v-col-4">
-            <v-img
-              cover
-              aspect-ratio="1"
-              src="https://picsum.photos/200/100"
-            ></v-img>
+            <div v-if="rdv.booked === true">
+              <v-img cover aspect-ratio="1" :src="rdv.flash_id.image"></v-img>
+            </div>
+            <div v-else>
+              <v-img cover aspect-ratio="1" src="/src/assets/logo.png"></v-img>
+            </div>
           </v-col>
           <v-col class="v-col-4">
             <div class="time rounded">
@@ -141,27 +142,23 @@
       </div>
     </div>
 
+    <!-- Partie flash -->
     <div v-if="selectedSection === 'Flash'">
       <v-divider><h2>Liste des Flashs</h2></v-divider>
 
-      <div v-if="flashStore.flashes.length === 0" class="text-center my-5">
+      <div v-if="currentUser.flash.length === 0" class="text-center my-5">
         <p>Vous n'avez aucun flash pour le moment.</p>
       </div>
 
       <div v-else>
         <v-row
-          v-for="flash in flashStore.flashes"
-          :key="flash.user_id"
+          v-for="flash in currentUser.flash"
+          :key="flash._id"
           align="center"
           class="mt-1"
         >
           <v-col class="v-col-4">
             <v-img cover aspect-ratio="1" :src="flash.image"></v-img>
-          </v-col>
-          <v-col class="v-col-4">
-            <div class="time rounded">
-              <p class="text-center">{{ formatPrice(flash.price) }}</p>
-            </div>
           </v-col>
           <v-col>
             <div class="location v-col-auto pa-0">
@@ -185,11 +182,13 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import { storeToRefs } from "pinia";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
 import ImageIntroduction from "@/components/ImageIntroduction.vue";
 import { useRdvStore } from "@/stores/rdvStore";
 import { useAuthStore } from "@/stores/authStore";
 import { useFlashStore } from "@/stores/flashStore";
+import { useUserStore } from "@/stores/userStore";
 
 export default defineComponent({
   name: "AppointmentForm",
@@ -207,22 +206,55 @@ export default defineComponent({
 
     const message = ref<string>("");
     const rdvId = ref<string | null>(null);
-    const selectedCity = ref<string>('');
+    const selectedCity = ref<string>("");
 
     const selectedSection = ref("Mes informations");
     const router = useRouter();
     const rdvStore = useRdvStore();
     const authStore = useAuthStore();
     const flashStore = useFlashStore();
+    const userStore = useUserStore();
+    const { rdvs } = storeToRefs(rdvStore);
+    const { currentUser } = storeToRefs(userStore);
     let searchTimer: ReturnType<typeof setTimeout> | null = null;
 
-    onMounted(async () => {
-      if (selectedSection.value === "Créneaux") {
+    const fetchRdvsArtist = async () => {
+      try {
+        console.log("Fetching RDVs for artist...");
         await rdvStore.fetchRdvsArtist();
-      } else if (selectedSection.value === "Flash") {
-        await flashStore.fetchFlashesArtist();
+        // console.log("Fetched RDVs:", rdvs.value);
+        // console.log("Fetched RDV image:", rdvs.flash_id.image);
+      } catch (error) {
+        console.error("Failed to fetch RDVs:", error);
       }
+    };
+
+    const fetchUserFlash = async () => {
+      try {
+        console.log("Fetching Users...");
+        await userStore.fetchUserByUsername(authStore.username);
+        console.log("Fetched User:", currentUser.value);
+        // console.log("Fetched User flash:", userStore.flash.value);
+      } catch (error) {
+        console.error("Failed to fetch User:", error);
+      }
+    };
+
+    onMounted(() => {
+      fetchRdvsArtist();
+      fetchUserFlash();
     });
+
+    const formatDate = (dateString) => {
+      const options = {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+      };
+      return new Date(dateString).toLocaleDateString("fr-FR", options);
+    };
 
     const formatPrice = (price: number) => {
       return new Intl.NumberFormat("fr-FR", {
@@ -230,10 +262,7 @@ export default defineComponent({
         currency: "EUR",
       }).format(price);
     };
-    const formatDate = (dateString: string) => {
-      const date = new Date(dateString);
-      return date.toLocaleString(); // Vous pouvez personnaliser le format ici
-    };
+
     const handleInput = async () => {
       if (!selectedCountry.value || searchQuery.value.trim() === "") {
         searchResults.value = [];
@@ -270,7 +299,11 @@ export default defineComponent({
       latitude = result.y;
 
       // Extract the city from the result object
-      selectedCity.value = result.raw.address.city || result.raw.address.town || result.raw.address.village || 'Unknown city';
+      selectedCity.value =
+        result.raw.address.city ||
+        result.raw.address.town ||
+        result.raw.address.village ||
+        "Unknown city";
     };
 
     const createAppointment = async () => {
@@ -297,10 +330,10 @@ export default defineComponent({
         };
 
         const response = await rdvStore.createNewRdv(appointmentObject);
-        message.value = 'Le rendez-vous a été créé!';
+        message.value = "Le rendez-vous a été créé!";
         rdvId.value = response._id; // assuming response contains the created rdv object with _id
       } catch (error) {
-        console.error('Error:', error);
+        console.error("Error:", error);
         //message.value = 'Erreur lors de la création de rendez-vous';
       }
     };
@@ -321,8 +354,10 @@ export default defineComponent({
       authStore,
       rdvStore,
       flashStore,
+      userStore,
       formatPrice,
       formatDate,
+      currentUser,
     };
   },
 });
