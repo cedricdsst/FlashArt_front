@@ -1,5 +1,6 @@
 <template>
   <v-card class="pb-5" cols="12" md="4">
+    <p v-if="!flash.available">NON DISPONIBLE</p>
     <v-img
       width="100%"
       :aspect-ratio="1/1"
