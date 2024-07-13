@@ -1,7 +1,7 @@
 // src/services/authService.ts
 
-// Définissez l'URL de base de votre API
-const API_URL = 'http://localhost:3000/api' // Ajustez selon votre configuration
+
+const API_URL = 'http://localhost:3000/api'
 
 interface SignupData {
     email: string
@@ -32,7 +32,7 @@ export const authService = {
             headers: {
                 'Content-Type': 'application/json'
             },
-            credentials: 'include', // Important pour inclure les cookies dans la requête
+            credentials: 'include',
             body: JSON.stringify(data)
         })
         return response.json()
@@ -41,7 +41,7 @@ export const authService = {
     async logout() {
         const response = await fetch(`${API_URL}/auth/logout`, {
             method: 'GET',
-            credentials: 'include' // Important pour inclure les cookies dans la requête
+            credentials: 'include'
         })
         return response.json()
     },
@@ -49,7 +49,7 @@ export const authService = {
     async verifyToken() {
         const response = await fetch(`${API_URL}/auth/verifyToken`, {
             method: 'GET',
-            credentials: 'include' // Important pour inclure les cookies dans la requête
+            credentials: 'include'
         })
 
 

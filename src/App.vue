@@ -6,10 +6,7 @@
   }
 }
 
-/* * {
-  overflow-x: hidden;
-  overflow-y: hidden;
-} */
+
 
 .custom-link {
   color: inherit;

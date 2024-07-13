@@ -1,4 +1,4 @@
-<!-- src/views/dashboards/User.vue -->
+
 <template>
   <v-container>
     <h2>User vue</h2>

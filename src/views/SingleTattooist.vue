@@ -21,25 +21,7 @@
       </v-row>
     </v-container>
 
-    <!-- <v-divider><h2>Créneaux disponibles</h2></v-divider> -->
 
-    <!-- <v-container class="pl-0 pr-0">
-      <v-row>
-        <v-col v-for="rdv in currentUser?.rdvs" :key="rdv._id" cols="12" sm="6" md="4">
-          <v-card>
-            <v-img class="img-list" cover aspect-ratio="1" :src="rdv.flash_id?.image || 'https://picsum.photos/200'"></v-img>
-            <v-card-text>
-              <div class="time rounded">
-                <p class="text-center">{{ formatDate(rdv.date) }}</p>
-              </div>
-              <div class="location mt-2">
-                <p><v-icon>mdi-map-marker</v-icon> <span>{{ rdv.properties.address }}</span></p>
-              </div>
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container> -->
   </v-container>
 </template>
 

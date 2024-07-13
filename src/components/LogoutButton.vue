@@ -19,7 +19,7 @@ const logout = async () => {
     router.push("/login");
   } catch (error) {
     console.error("Erreur lors de la déconnexion:", error);
-    // Gérer l'erreur (par exemple, afficher un message à l'utilisateur)
+    
   }
 };
 </script>

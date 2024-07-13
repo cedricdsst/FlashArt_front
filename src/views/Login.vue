@@ -66,7 +66,7 @@ export default defineComponent({
   methods: {
     async login() {
       try {
-        // store d'authentification
+       
         const authStore = useAuthStore();
         await authStore.login({
           email: this.email,
@@ -74,13 +74,13 @@ export default defineComponent({
           stayLoggedIn: true,
         });
 
-        // Redirection basée sur le rôle
+       
         if (authStore.role === "artist") {
           this.$router.push("/dashboard/tattoist");
         } else if (authStore.role === "client") {
           this.$router.push("/dashboard/user");
         } else {
-          // Redirection par défaut ou gestion d'erreur
+          
           console.error("Rôle non reconnu");
           this.$router.push("/");
         }

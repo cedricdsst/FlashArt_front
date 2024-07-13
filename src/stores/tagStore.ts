@@ -13,9 +13,9 @@ export const useTagStore = defineStore('tag', () => {
 
   const fetchTags = async () => {
     try {
-      // console.log('Fetching tags from store...'); // Journal de débogage
+
       tags.value = await getAllTags();
-      // console.log('Tags fetched in store:', tags.value); // Journal de débogage
+
     } catch (error) {
       console.error('Failed to fetch tags:', error);
     }

@@ -35,7 +35,7 @@ export const useAuthStore = defineStore('auth', {
             }
         },
         async login(user: { email: string; password: string; stayLoggedIn: boolean }) {
-            
+
 
             try {
                 const response = await authService.login(user);
@@ -53,7 +53,7 @@ export const useAuthStore = defineStore('auth', {
                 }
             } catch (error) {
                 this.clearUser();
-                throw error; // Propager l'erreur pour une gestion plus détaillée ou un affichage utilisateur
+                throw error;
             }
         },
         async logout() {
@@ -64,11 +64,11 @@ export const useAuthStore = defineStore('auth', {
                 throw error
             }
         },
-        // Dans authStore.ts
+
         async verifyToken() {
             try {
                 const response = await authService.verifyToken();
-                // Assurez-vous que la réponse contient les données attendues avant d'essayer d'y accéder
+
                 if (response && response.data) {
                     this.userId = response.data.userId;
                     this.username = response.data.username;
@@ -77,12 +77,11 @@ export const useAuthStore = defineStore('auth', {
                     this.email = response.data.email;
                     this.role = response.data.role;
                 } else {
-                    // Gérer le cas où les données ne sont pas comme prévu
+
                     this.clearUser();
                 }
             } catch (error) {
-                // Ici, vous pouvez choisir de simplement nettoyer l'utilisateur sans jeter une autre erreur,
-                // car un échec de verifyToken dû à un utilisateur non connecté est un cas valide
+
                 this.clearUser();
                 console.error("Erreur lors de la vérification du token: ", error);
             }

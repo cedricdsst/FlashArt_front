@@ -27,9 +27,9 @@ import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useFlashStore } from '../stores/flashStore';
-import { useRdvStore } from '../stores/rdvStore'; // Adjust the import path as necessary
-import Card from '../components/Card.vue'; // Adjust the import path as necessary
-import Timetable from '../components/Timetable.vue'; // Adjust the import path as necessary
+import { useRdvStore } from '../stores/rdvStore'; 
+import Card from '../components/Card.vue'; 
+import Timetable from '../components/Timetable.vue'; 
 
 console.log('SingleTattoo component setup initialized'); 
 
@@ -42,10 +42,10 @@ const notification = ref({ message: '', type: '' });
 
 const fetchData = async () => {
   const flashId = route.params.flashId;
-  console.log('Fetching data for flash ID:', flashId); // Debug log to check flashId
+  console.log('Fetching data for flash ID:', flashId); 
 
   await flashStore.fetchFlashById(flashId);
-  console.log('Fetched flash data:', currentFlash.value); // Debug log to check currentFlash
+  console.log('Fetched flash data:', currentFlash.value); 
 };
 
 onMounted(fetchData);
@@ -56,12 +56,12 @@ const book = async (rdvId) => {
     await rdvStore.bookExistingRdv(rdvId, currentFlash.value._id);
     notification.value = { message: 'RDV booked successfully!', type: 'success' };
     console.log('RDV booked successfully');
-    await fetchData(); // Refetch the data after booking
+    await fetchData(); 
   } catch (error) {
     console.error('Failed to book RDV:', error);
     notification.value = { message: 'Failed to book RDV.', type: 'error' };
   }
-  setTimeout(clearNotification, 4000); // Clear notification after 4 seconds
+  setTimeout(clearNotification, 4000); 
 };
 
 const clearNotification = () => {
